@@ -13,6 +13,8 @@ root=Path(__file__).resolve().parents[1]
 for i in range(1,5):
     s=json.loads((root/f'config/mini-{i}.json').read_text())
     s['collection']=f'lab_{a.run}_n{a.workers}'
-    if i==1: s['nodes']=s['nodes'][:a.workers]
+    if i==1:
+        s['nodes']=s['nodes'][:a.workers]
+        s['retrieval_mode']='broadcast'  # worker-count baseline; routing is a separate experiment
     (a.output/f'mini-{i}.json').write_text(json.dumps(s,indent=2)+'\n')
 print(f'Copy each config onto matching mini as config/local.json; restart services. Collection: {s["collection"]}')

@@ -5,6 +5,8 @@ import secrets
 import time
 import uuid
 from contextlib import asynccontextmanager
+from typing import Literal
+from .routing import rank_nodes
 import httpx
 from fastapi import FastAPI, HTTPException, Request, UploadFile
 from pydantic import BaseModel, Field
@@ -17,8 +19,10 @@ log = logging.getLogger('belleq.metrics')
 
 class Query(BaseModel):
     query: str = Field(min_length=1, max_length=2000, pattern=r'\S')
-    top_k: int = Field(default=5, ge=1, le=100)
+    top_k: int = Field(default=3, ge=1, le=100)
     per_node_k: int | None = Field(default=None, ge=1, le=200)
+    mode: Literal["broadcast", "semantic_sequential"] | None = None
+    min_score: float | None = Field(default=None, ge=-1, le=1, allow_inf_nan=False)
     allow_partial: bool = False
     query_id: str = Field(default_factory=lambda: str(uuid.uuid4()), max_length=64)
 
@@ -55,6 +59,8 @@ def create_app(settings=None, backend=None, node_client=None):
         async with httpx.AsyncClient(trust_env=False) as client:
             app.state.backend = backend or Backends(s, client)
             app.state.nodes = node_client or client
+            app.state.catalogue = None
+            app.state.catalogue_lock = asyncio.Lock()
             await app.state.backend.initialize()
             yield
 
@@ -142,7 +148,42 @@ def create_app(settings=None, backend=None, node_client=None):
         if not s.coordinator:
             raise HTTPException(403, 'Aggregator is disabled on this worker')
         started = time.perf_counter()
-        per_k = q.per_node_k or q.top_k
+        mode = q.mode or s.retrieval_mode
+        threshold = q.min_score if q.min_score is not None else (
+            s.relevance_threshold if mode == 'semantic_sequential' else None)
+        per_k = q.per_node_k or (max(5, q.top_k) if mode == 'semantic_sequential' else q.top_k)
+        ranking = []
+        router_ms = 0.0
+        catalogue_ms = 0.0
+        query_embedding_ms = 0.0
+        catalogue_built = False
+        ordered_nodes = s.nodes
+        if mode == 'semantic_sequential':
+            if any(not n.description.strip() for n in s.nodes):
+                raise HTTPException(422, 'Semantic routing requires a description for every node')
+            router_started = time.perf_counter()
+            await ready()
+            try:
+                # Metadata embeddings only: local cached catalogue, never retrieval results.
+                async with app.state.catalogue_lock:
+                    if app.state.catalogue is None:
+                        t = time.perf_counter()
+                        vectors = await app.state.backend.embed([n.description for n in s.nodes])
+                        # Validate before caching; also prevents retry with corrupt vectors.
+                        rank_nodes(s.nodes, vectors[0], vectors)
+                        app.state.catalogue = vectors
+                        catalogue_ms = (time.perf_counter()-t)*1000
+                        catalogue_built = True
+                t = time.perf_counter()
+                vector = (await app.state.backend.embed([q.query], query=True))[0]
+                query_embedding_ms = (time.perf_counter()-t)*1000
+                ranked = rank_nodes(s.nodes, vector, app.state.catalogue)
+            except Exception as exc:
+                log.exception('routing_failed query_id=%s', q.query_id)
+                raise HTTPException(502, 'Semantic routing failed; no worker queried') from exc
+            ordered_nodes = [n for n, score in ranked]
+            ranking = [{'node_id': n.id, 'routing_score': score} for n, score in ranked]
+            router_ms = (time.perf_counter()-router_started)*1000
         if per_k < q.top_k:
             raise HTTPException(422, 'per_node_k must be at least top_k')
         payload = json.dumps({'query': q.query, 'top_k': per_k, 'query_id': q.query_id},
@@ -165,6 +206,8 @@ def create_app(settings=None, backend=None, node_client=None):
                     if data['fingerprint'] != app.state.backend.fingerprint or data['signature'] != app.state.backend.signature:
                         raise ValueError('Embedding schema mismatch')
                     # Validate remote hit shape before accepting the node as successful.
+                    if len(data['chunks']) > per_k:
+                        raise ValueError('Worker exceeded requested top_k')
                     for h in data['chunks']:
                         if not isinstance(h['text'], str) or not isinstance(h['score'], (float, int)):
                             raise ValueError('Invalid hit')
@@ -174,8 +217,11 @@ def create_app(settings=None, backend=None, node_client=None):
                         for key in ('id', 'doc_id', 'source'):
                             if not isinstance(h[key], str):
                                 raise ValueError('Invalid hit identity')
-                    item.update(status='ok', timings=data['timings'])
-                    return item, data['chunks']
+                    accepted = [h for h in data['chunks'] if h['text'].strip()
+                                and (threshold is None or h['score'] >= threshold)]
+                    item.update(status='ok', timings=data['timings'],
+                                returned_chunks=len(data['chunks']), accepted_chunks=len(accepted))
+                    return item, accepted
             except (TimeoutError, httpx.TimeoutException):
                 item['error'] = 'timeout'
             except Exception as exc:
@@ -184,21 +230,44 @@ def create_app(settings=None, backend=None, node_client=None):
                 item['round_trip_ms'] = (time.perf_counter()-t)*1000
             return item, []
 
-        pairs = await asyncio.gather(*(fetch(n) for n in s.nodes))
+        search_started = time.perf_counter()
+        if mode == 'broadcast':
+            pairs = await asyncio.gather(*(fetch(n) for n in ordered_nodes))
+        else:
+            pairs = []
+            for node in ordered_nodes:
+                pairs.append(await fetch(node))
+                accepted = merge_results([(n['node_id'], h) for n, h in pairs
+                                          if n['status'] == 'ok'], q.top_k)
+                # No speculative or background calls to remaining nodes.
+                if len(accepted) >= q.top_k:
+                    break
         received = time.perf_counter()
         statuses = [p[0] for p in pairs]
         failed = [n['node_id'] for n in statuses if n['status'] != 'ok']
         hits = merge_results([(n['node_id'], h) for n, h in pairs if n['status'] == 'ok'], q.top_k)
-        result = {'query_id': q.query_id, 'partial': bool(failed), 'failed_nodes': failed,
+        visited = {n['node_id'] for n in statuses}
+        target_reached = len(hits) >= q.top_k
+        result = {'query_id': q.query_id, 'partial': bool(failed),
+                  'routing': {'mode': mode, 'ranking': ranking,
+                              'visited_nodes': [n['node_id'] for n in statuses],
+                              'skipped_nodes': [n.id for n in ordered_nodes if n.id not in visited],
+                              'min_score': threshold, 'target_chunks': q.top_k,
+                              'target_reached': target_reached,
+                              'stop_reason': ('target_reached' if mode == 'semantic_sequential'
+                                              and target_reached else 'all_nodes_visited'),
+                              'catalogue_built': catalogue_built}, 'failed_nodes': failed,
                   'nodes': statuses, 'chunks': hits, 'fingerprint': app.state.backend.fingerprint,
-                  'timings': {'fanout_ms': (received-started)*1000,
+                  'timings': {'router_ms': router_ms, 'catalogue_embedding_ms': catalogue_ms,
+                              'router_query_embedding_ms': query_embedding_ms,
+                              'fanout_ms': (received-search_started)*1000,
                               'merge_ms': (time.perf_counter()-received)*1000,
                               'aggregate_ms': (time.perf_counter()-started)*1000},
                   'traffic': {'unit': 'application_http_body_bytes_not_ethernet',
                               'request_bytes': sum(n['request_body_bytes'] for n in statuses),
                               'response_bytes': sum(n['response_body_bytes'] for n in statuses)}}
         log.info(json.dumps({'event': 'aggregate', **{k: v for k, v in result.items() if k != 'chunks'}}))
-        if failed and (not q.allow_partial or len(failed) == len(s.nodes)):
+        if failed and (not q.allow_partial or len(failed) == len(statuses)):
             raise HTTPException(503, result)
         return result
 

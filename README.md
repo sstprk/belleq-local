@@ -2,18 +2,20 @@
 
 Belleq'in belge alma ve retrieval çekirdeğinden türetilmiş bağımsız deney servisi.
 Her mini kendi Qdrant verisini tutar. Koordinatör HTTP üzerinden yerel sorgu
-API'lerini paralel çağırır, ortak top-k'yi oluşturur ve isteğe bağlı olarak
+API'lerini broadcast veya semantic sıralı modda çağırır, ortak top-k'yi oluşturur ve isteğe bağlı olarak
 kanıtları Ollama'daki Qwen modeline gönderir. MCP, model bölme veya eğitim yoktur.
 
 ## Mimari ve kararlar
 
 - `POST /query` ve `/v1/retrieve/local`: yalnızca bu mini'de arama.
-- `POST /v1/retrieve/aggregate`: düğümlere paralel yerel sorgu, birleştirme.
+- `POST /v1/retrieve/aggregate`: seçilen moda göre paralel veya erken duran sıralı arama.
 - `POST /v1/answer`: aggregate + prompt'a kanıt ekleme + cevap üretimi.
 - `POST /v1/documents/text`: JSON metin yükleme.
 - `POST /v1/documents/upload`: PDF, DOCX, TXT, MD, HTML yükleme.
 - `GET /health/live`, `/health/ready`: süreç ve bağımlılık kontrolleri.
 - `/docs`: OpenAPI etkileşimli API belgesi.
+
+Yeni mini-1 şablonunda semantic sıralı mod açıktır; eski config'ler broadcast kalır. İsteklerde `top_k` belirtilmezse yeni varsayılan 3'tür.
 
 Varsayılan coordinator mini-1 (.11); arama düğümleri mini-2/3/4 (.12/.13/.14).
 Mini-1'in yerel retrieval servisi de hazırdır. Kendi verisini de aramak için
@@ -23,7 +25,7 @@ Koordinatöre geri dönen çağrı sadece `/v1/retrieve/local` olur; recursive a
 karışmasını azaltır. Yine de mini-1'de yerel Qdrant ve embedding modeli kurulur.
 
 Bu Qdrant native cluster değil: bağımsız DB'lerin uygulama katmanında birleşmesidir.
-Bütün çalışanlara aynı soru gider; konu router'ı yoktur. Her worker kendi query
+Broadcast modunda bütün çalışanlara aynı soru gider. Semantic sıralı mod için [ROUTING.md](ROUTING.md) belgesine bak. Her worker kendi query
 embedding'ini hesaplar. Dolayısıyla ölçülen süre embedding maliyetini de içerir;
 `embedding_ms` ve `search_ms` ayrıdır. Embedding'i koordinatörde bir kere üretmek
 ayrı bir sonraki deney olabilir; bu uygulama onu sessizce yapmaz.

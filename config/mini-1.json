@@ -17,15 +17,20 @@
   "nodes": [
     {
       "id": "mini-2",
-      "url": "http://192.168.50.12:8000"
+      "url": "http://192.168.50.12:8000",
+      "description": "Frankenstein; or, The Modern Prometheus by Mary Shelley. Gothic science fiction about Victor Frankenstein, the creature he creates, scientific ambition, responsibility, isolation, family, revenge, and Robert Walton. Settings include Geneva, Ingolstadt, and the Arctic."
     },
     {
       "id": "mini-3",
-      "url": "http://192.168.50.13:8000"
+      "url": "http://192.168.50.13:8000",
+      "description": "The Hound of the Baskervilles by Arthur Conan Doyle. A detective mystery featuring Sherlock Holmes, Dr. Watson, Dr. James Mortimer, Sir Henry Baskerville, the Stapletons and the Barrymores. Investigations, family inheritance, a mysterious death, a legendary hound, and the moors of Dartmoor."
     },
     {
       "id": "mini-4",
-      "url": "http://192.168.50.14:8000"
+      "url": "http://192.168.50.14:8000",
+      "description": "Persuasion by Jane Austen. A romance and social novel about Anne Elliot and Captain Frederick Wentworth, a broken engagement, renewed affection, family status, money, marriage, naval officers and social expectations. Settings include Kellynch Hall, Uppercross, Lyme Regis, and Bath."
     }
-  ]
+  ],
+  "retrieval_mode": "semantic_sequential",
+  "relevance_threshold": 0.7
 }

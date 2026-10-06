@@ -7,3 +7,9 @@ config/local.json
 logs/
 data/
 wheelhouse/
+
+.uv-python/
+.uv-cache/
+.uv-bin/
+config/*.before-routing
+.DS_Store

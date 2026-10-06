@@ -16,6 +16,9 @@ async def main():
     p.add_argument('--concurrency',type=int,default=1)
     p.add_argument('--repeat',type=int,default=3)
     p.add_argument('--top-k',type=int,default=5)
+    p.add_argument('--mode', choices=['broadcast','semantic_sequential'], default='broadcast')
+    p.add_argument('--min-score', type=float, default=.70)
+    p.add_argument('--per-node-k', type=int, default=5)
     a=p.parse_args()
     if a.concurrency<1 or a.repeat<1: p.error('positive concurrency/repeat required')
     queries=[q.strip() for q in a.queries.read_text().splitlines() if q.strip()]
@@ -27,7 +30,8 @@ async def main():
             async def run(query,iteration):
                 async with sem:
                     qid=str(uuid.uuid4()); start=time.perf_counter()
-                    body=json.dumps({'query':query,'top_k':a.top_k,'query_id':qid},ensure_ascii=False).encode()
+                    body=json.dumps({'query':query,'top_k':a.top_k,'per_node_k':a.per_node_k,
+                                     'mode':a.mode,'min_score':a.min_score,'query_id':qid},ensure_ascii=False).encode()
                     row={'query_id':qid,'iteration':iteration,'query':query,'request_body_bytes':len(body)}
                     try:
                         r=await c.post(a.url,content=body,headers={'content-type':'application/json'})

@@ -44,3 +44,8 @@
 7. SSH oturumunu kapat; API'nin erişilebilir kaldığını doğrula.
 8. Wi-Fi kapalıyken aynı deney çalışsın (yönetim MacBook'undaki interneti koruyabilirsin).
 9. 1/2/3 koşullarını yeni collection'lar ve aynı corpus manifestiyle ölç.
+
+## 6 Ekim 2026 — semantic router güncellemesi
+
+Yerel otomatik test sayısı 27; tümü geçti. Ek kapsam ve sınırlar ROUTING.md'de.
+Bu değişiklikte gerçek mini'lere dağıtım veya GitHub push yapılmadı.
