@@ -250,3 +250,9 @@ uv run --frozen pytest -q
 ```
 
 Bu ilk teslim çalışan mini kümesi üzerinde doğrulanmış bir performans sonucu değildir.
+
+## Deney ölçümleri
+
+Kategorik yerleşimde sorgu ve mini bazlı kalite/süre CSV'leri, paket kaydı ve
+Wireshark/TShark trafik analizi için [EVALUATION.md](EVALUATION.md).
+Dokuz soruluk set yalnızca etiketleri gözden geçirilecek bir pilot settir.

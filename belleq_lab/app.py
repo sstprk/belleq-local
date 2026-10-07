@@ -220,7 +220,10 @@ def create_app(settings=None, backend=None, node_client=None):
                     accepted = [h for h in data['chunks'] if h['text'].strip()
                                 and (threshold is None or h['score'] >= threshold)]
                     item.update(status='ok', timings=data['timings'],
-                                returned_chunks=len(data['chunks']), accepted_chunks=len(accepted))
+                                returned_chunks=len(data['chunks']), accepted_chunks=len(accepted),
+                                candidates=[{'content_hash': content_hash(h['text']),
+                                             'id': h['id'], 'score': h['score']}
+                                            for h in data['chunks']])
                     return item, accepted
             except (TimeoutError, httpx.TimeoutException):
                 item['error'] = 'timeout'

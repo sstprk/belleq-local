@@ -1,0 +1,20 @@
+{
+  "frankenstein.txt": {
+    "sha256": "7810cd483cffcf2cc8a1d8f0d5807931e69d4f48cd14149b8c76f88af82fead3",
+    "doc_id": "770cf1f18d2262976602bab3cffeaab595e78bbf566c9527f2b2a0b1375778bd",
+    "chunks": 1278,
+    "categorical_node": "mini-2"
+  },
+  "hound-of-the-baskervilles.txt": {
+    "sha256": "f7c8c68729d32a5f6a04a5a9ad73d184176e66a6c76b3992c41c1ab47b427d98",
+    "doc_id": "3d79f9b5091f92fef767fb0e92d36141a92313cdb9aae82b40728e12b245df6a",
+    "chunks": 1098,
+    "categorical_node": "mini-3"
+  },
+  "persuasion.txt": {
+    "sha256": "64ffb821b9e9eb1040c103a44c28893c94ebe33ffbb911288b5022efaecbfefc",
+    "doc_id": "447d6d31282e5aa50468e8ee73832073a5c6ae7cf16dc5a639dc674bbda199bc",
+    "chunks": 1388,
+    "categorical_node": "mini-4"
+  }
+}

@@ -13,3 +13,6 @@ wheelhouse/
 .uv-bin/
 config/*.before-routing
 .DS_Store
+results/
+*.pcap
+*.pcapng

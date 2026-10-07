@@ -49,3 +49,19 @@
 
 Yerel otomatik test sayısı 27; tümü geçti. Ek kapsam ve sınırlar ROUTING.md'de.
 Bu değişiklikte gerçek mini'lere dağıtım veya GitHub push yapılmadı.
+
+## 2026-10-07 — retrieval evaluation and capture reports
+
+- 31 tests passed locally (`.venv/bin/python -m pytest -q`). Added quality ranking,
+  duplicate evidence, missing result slots, failure/skipped handling, evaluator
+  output with a mocked HTTP service, capture direction/window/no double-count tests.
+- Existing ASGI test verifies coordinator candidate metadata without extra text.
+- Compileall and git diff whitespace checks passed.
+- Installed TShark 4.4.5 decoded a synthetic one-frame Ethernet/IPv4/TCP PCAP;
+  network report attributed 54 TX bytes to mini-1 and 54 RX bytes to mini-2 and
+  counted 54 unique bytes, not 108. This is tooling verification, not a lab measurement.
+- Pilot qrels generated from actual Desktop/books byte content: exact chunk counts
+  1278/1098/1388. Judgements remain draft and non-exhaustive pending evidence review.
+- Not yet deployed or measured on the minis: no real PCAP, no drop-count check,
+  no measured quality/latency/throughput results produced for the new experiment.
+- Random chunk and single-DB dataset placements are not implemented by this change.

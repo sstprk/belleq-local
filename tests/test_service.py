@@ -56,6 +56,8 @@ async def test_real_asgi_fanout_self_local_and_answer():
             assert len(apps['mini-1'].state.backend.calls) == 1
             assert data['traffic']['response_bytes'] > 0
             assert all('embedding_ms' in n['timings'] for n in data['nodes'])
+            assert all(len(n['candidates']) == 2 for n in data['nodes'])
+            assert all('text' not in h for n in data['nodes'] for h in n['candidates'])
             denied = await network.post('http://mini-2/v1/retrieve/aggregate', json={'query':'test'})
             assert denied.status_code == 403
 

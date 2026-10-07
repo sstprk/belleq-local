@@ -1,0 +1,115 @@
+[
+  {
+    "case_id": "f1",
+    "query": "In which city was Victor Frankenstein born?",
+    "anchor": "I am by birth a Genevese",
+    "evidence": [
+      {
+        "chunk_index": 92,
+        "content_hash": "0b06d66811ce2c5387bc0174534ea8d41e364f49c8257888125ceeeee8d1b7c2",
+        "text": "the lineaments of his face are irradiated by the soul\r\nwithin. Strange and harrowing must be his story, frightful the storm which\r\nembraced the gallant vessel on its course and wrecked it—thus!\r\n\r\n\r\n\r\n\r\nChapter 1\r\n\r\n\r\nI am by birth a Genevese, and my family is one of the most\r\ndistinguished of that republic. My ancestors had been for many years\r\ncounsellors and syndics, and my father had filled several public\r\nsituations with honour and reputation."
+      }
+    ]
+  },
+  {
+    "case_id": "f2",
+    "query": "At which university did Victor Frankenstein become a student?",
+    "anchor": "university of Ingolstadt",
+    "evidence": [
+      {
+        "chunk_index": 159,
+        "content_hash": "582f82a5027440fea9a7c3a7504017afe0e12f5209bb525b91c7243f7cb3567a",
+        "text": "e relinquishing of my ancient and latterly tormenting\r\nstudies. It was thus that I was to be taught to associate evil with\r\ntheir prosecution, happiness with their disregard.\r\n\r\nIt was a strong effort of the spirit of good, but it was ineffectual.\r\nDestiny was too potent, and her immutable laws had decreed my utter and\r\nterrible destruction.\r\n\r\n\r\n\r\n\r\nChapter 3\r\n\r\n\r\nWhen I had attained the age of seventeen my parents resolved that I\r\nshould become a student at the university of Ingolstadt."
+      },
+      {
+        "chunk_index": 160,
+        "content_hash": "9cd76b92e18bed5486dcc49e1c5d33773f7bdc5b962666fdb61359245803b5a8",
+        "text": "hat I\r\nshould become a student at the university of Ingolstadt. I had\r\nhitherto attended the schools of Geneva, but my father thought it\r\nnecessary for the completion of my education that I should be made\r\nacquainted with other customs than those of my native country."
+      }
+    ]
+  },
+  {
+    "case_id": "f3",
+    "query": "In which month did Victor Frankenstein bring the creature to life?",
+    "anchor": "dreary night of November",
+    "evidence": [
+      {
+        "chunk_index": 247,
+        "content_hash": "23909f42adc2d934d85314766afe8e094aa9cbc8d93316a4c54fc2a3e890b2f1",
+        "text": "hunned my fellow\r\ncreatures as if I had been guilty of a crime. Sometimes I grew alarmed at\r\nthe wreck I perceived that I had become; the energy of my purpose alone\r\nsustained me: my labours would soon end, and I believed that exercise and\r\namusement would then drive away incipient disease; and I promised myself\r\nboth of these when my creation should be complete.\r\n\r\n\r\n\r\n\r\nChapter 5\r\n\r\n\r\nIt was on a dreary night of November that I beheld the accomplishment\r\nof my toils."
+      }
+    ]
+  },
+  {
+    "case_id": "h1",
+    "query": "At which hospital did James Mortimer work as a house-surgeon?",
+    "anchor": "at Charing Cross Hospital",
+    "evidence": [
+      {
+        "chunk_index": 26,
+        "content_hash": "12b9f622c20c9ea2d4a5af372316b2fefbf229945b28739120034c7003714c3f",
+        "text": "everal Mortimers, but only one who could be our\r\n      visitor. I read his record aloud.\r\n\r\n        “Mortimer, James, M.R.C.S., 1882, Grimpen, Dartmoor, Devon.\r\n        House-surgeon, from 1882 to 1884, at Charing Cross Hospital.\r\n        Winner of the Jackson prize for Comparative Pathology, with\r\n        essay entitled ‘Is Disease a Reversion?’  Corresponding member\r\n        of the Swedish Pathological Society.  Author of ‘Some Freaks of\r\n        Atavism’ (_Lancet_ 1882)."
+      }
+    ]
+  },
+  {
+    "case_id": "h2",
+    "query": "Which prize did Dr. James Mortimer win for Comparative Pathology?",
+    "anchor": "Jackson prize for Comparative Pathology",
+    "evidence": [
+      {
+        "chunk_index": 26,
+        "content_hash": "12b9f622c20c9ea2d4a5af372316b2fefbf229945b28739120034c7003714c3f",
+        "text": "everal Mortimers, but only one who could be our\r\n      visitor. I read his record aloud.\r\n\r\n        “Mortimer, James, M.R.C.S., 1882, Grimpen, Dartmoor, Devon.\r\n        House-surgeon, from 1882 to 1884, at Charing Cross Hospital.\r\n        Winner of the Jackson prize for Comparative Pathology, with\r\n        essay entitled ‘Is Disease a Reversion?’  Corresponding member\r\n        of the Swedish Pathological Society.  Author of ‘Some Freaks of\r\n        Atavism’ (_Lancet_ 1882)."
+      }
+    ]
+  },
+  {
+    "case_id": "h3",
+    "query": "What kind of footprints did Dr. Mortimer report to Holmes near Sir Charles’s body?",
+    "anchor": "footprints of a gigantic hound",
+    "evidence": [
+      {
+        "chunk_index": 121,
+        "content_hash": "f8ab82b3e2b52f08011648cfe984e5caff7ea24a9f80f6ca6eeea0c74709f1c9",
+        "text": "upon the ground round\r\n      the body. He did not observe any. But I did—some little distance\r\n      off, but fresh and clear.”\r\n\r\n      “Footprints?”\r\n\r\n      “Footprints.”\r\n\r\n      “A man’s or a woman’s?”\r\n\r\n      Dr. Mortimer looked strangely at us for an instant, and his voice\r\n      sank almost to a whisper as he answered.\r\n\r\n      “Mr. Holmes, they were the footprints of a gigantic hound!”\r\n\r\n\r\n\r\n\r\nChapter 3.\r\nThe Problem\r\n\r\n\r\n      I confess at these words a shudder passed through me."
+      }
+    ]
+  },
+  {
+    "case_id": "p1",
+    "query": "In which county is Sir Walter Elliot’s Kellynch Hall?",
+    "anchor": "Kellynch Hall, in Somersetshire",
+    "evidence": [
+      {
+        "chunk_index": 3,
+        "content_hash": "1c47ae8f46ce9783bdbc0cf0631580460144b111fd39a0646c4ac4e380a8236f",
+        "text": "R XVII.\r\n CHAPTER XVIII.\r\n CHAPTER XIX.\r\n CHAPTER XX.\r\n CHAPTER XXI.\r\n CHAPTER XXII.\r\n CHAPTER XXIII.\r\n CHAPTER XXIV.\r\n\r\n\r\n\r\n\r\nCHAPTER I.\r\n\r\n\r\nSir Walter Elliot, of Kellynch Hall, in Somersetshire, was a man who,\r\nfor his own amusement, never took up any book but the Baronetage; there\r\nhe found occupation for an idle hour, and consolation in a distressed\r\none; there his faculties were roused into admiration and respect, by\r\ncontemplating the limited remnant of the earliest patents; there any\r\nunwelcome sens"
+      }
+    ]
+  },
+  {
+    "case_id": "p2",
+    "query": "Which book did Sir Walter Elliot read for his own amusement?",
+    "anchor": "never took up any book but the Baronetage",
+    "evidence": [
+      {
+        "chunk_index": 3,
+        "content_hash": "1c47ae8f46ce9783bdbc0cf0631580460144b111fd39a0646c4ac4e380a8236f",
+        "text": "R XVII.\r\n CHAPTER XVIII.\r\n CHAPTER XIX.\r\n CHAPTER XX.\r\n CHAPTER XXI.\r\n CHAPTER XXII.\r\n CHAPTER XXIII.\r\n CHAPTER XXIV.\r\n\r\n\r\n\r\n\r\nCHAPTER I.\r\n\r\n\r\nSir Walter Elliot, of Kellynch Hall, in Somersetshire, was a man who,\r\nfor his own amusement, never took up any book but the Baronetage; there\r\nhe found occupation for an idle hour, and consolation in a distressed\r\none; there his faculties were roused into admiration and respect, by\r\ncontemplating the limited remnant of the earliest patents; there any\r\nunwelcome sens"
+      }
+    ]
+  },
+  {
+    "case_id": "p3",
+    "query": "What is Anne Elliot’s date of birth?",
+    "anchor": "Anne, born August 9, 1787",
+    "evidence": [
+      {
+        "chunk_index": 6,
+        "content_hash": "0d3c7898998ddc2a5e6582ad0ca9dc10210c1642bca0324f477b1fba7b47c32c",
+        "text": "d, July 15, 1784, Elizabeth,\r\ndaughter of James Stevenson, Esq. of South Park, in the county of\r\nGloucester, by which lady (who died 1800) he has issue Elizabeth, born\r\nJune 1, 1785; Anne, born August 9, 1787; a still-born son, November 5,\r\n1789; Mary, born November 20, 1791.”\r\n\r\nPrecisely such had the paragraph originally stood from the printer’s\r\nhands; but Sir Walter had improved it by adding, for the information of\r\nhimself and his family, these words, after the date of Mary’s\r\nbirth—“Married, December"
+      }
+    ]
+  }
+]
