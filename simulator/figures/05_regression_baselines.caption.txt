@@ -1,0 +1,1 @@
+100 held-out questions x four methods (400 complete observations). Selection and Ridge alpha search used validation questions only. All candidate metrics retained, including weak and negative results. Global R2 mixes between-method and within-method variation; consult per-method results.

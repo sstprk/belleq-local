@@ -1,0 +1,15 @@
+*.py text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.cff text eol=lf
+# Preserve scientific CSV bytes, including CRLF and whitespace inside answer cells.
+*.csv -text -whitespace
+*.pdf binary
+*.png binary
+*.docx binary
+simulator/artifacts/*.json linguist-generated=true
+simulator/data/augmented/*.csv linguist-generated=true
+simulator/results/*.csv linguist-generated=true
+simulator/figures/** linguist-generated=true
+simulator/paper_report_20261022/tables/** linguist-generated=true

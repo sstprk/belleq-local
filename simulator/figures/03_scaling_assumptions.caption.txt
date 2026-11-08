@@ -1,0 +1,1 @@
+Every curve is a hypothetical simulation, not a measured scaling result. Reused per-worker cost/payload archetypes; no corpus-size model, queueing, or shared-link saturation. Semantic owner-first probability=.57 chosen as an assumption. New node counts do not predict retrieval quality. Consistent markers: semantic blue star, broadcast green square, random orange triangle.

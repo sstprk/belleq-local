@@ -1,0 +1,20 @@
+[
+  {
+    "scenario": "random_node_order",
+    "threshold": 0.8,
+    "n": 500,
+    "hits": 23,
+    "generation_invoked": 30,
+    "no_context": 470,
+    "usage": "auxiliary_only_not_main_training"
+  },
+  {
+    "scenario": "single_db",
+    "threshold": 0.8,
+    "n": 500,
+    "hits": 23,
+    "generation_invoked": 30,
+    "no_context": 470,
+    "usage": "auxiliary_only_not_main_training"
+  }
+]

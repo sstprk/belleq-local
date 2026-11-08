@@ -1,0 +1,187 @@
+[
+  {
+    "source": "archived-lab-service/pyproject.toml",
+    "destination": "pyproject.toml",
+    "sha256": "8b1f8800d5dd35ecaacfbc02657233448fe0db03fd0e1913c1f0dadfcf1b6f74"
+  },
+  {
+    "source": "archived-lab-service/uv.lock",
+    "destination": "uv.lock",
+    "sha256": "94c1d88f9398dd751ee5daebf7c02baa23750ae6c1aebfd6efb7c673c8066bfc"
+  },
+  {
+    "source": "archived-lab-service/requirements.lock.txt",
+    "destination": "requirements.lock.txt",
+    "sha256": "5cfb2eb88f36597010d4b1636a607904ac39d486be74dc4e1665d2b57a38b074"
+  },
+  {
+    "source": "archived-lab-service/compose.yaml",
+    "destination": "compose.yaml",
+    "sha256": "349b2592926c2c8d3050f1e2a0abc9c2c0c4e290da74b42cbab1686cf08d74e8"
+  },
+  {
+    "source": "archived-lab-service/EVALUATION.md",
+    "destination": "EVALUATION.md",
+    "sha256": "57a5236a516276a04de0f0563f291c8bbc795644497dde94c4cc3aefbb7e2e30"
+  },
+  {
+    "source": "archived-lab-service/ROUTING.md",
+    "destination": "ROUTING.md",
+    "sha256": "55bfbe1471b51c3c7a558856a5735a7fd1002973ed7e4252d1557ed13c342a3f"
+  },
+  {
+    "source": "archived-lab-service/VALIDATION.md",
+    "destination": "VALIDATION.md",
+    "sha256": "75a414ecaf8e77d7dfb4df6e31edf9051f1b4caf648a87bb9aa43dfcdddf3072"
+  },
+  {
+    "source": "archived-lab-service/PROVENANCE.md",
+    "destination": "PROVENANCE.md",
+    "sha256": "c31b712368530a2c77e705114efa9e41240402ef43bbe022f4c9a6bd564d8b98"
+  },
+  {
+    "source": "archived-lab-service/README.md",
+    "destination": "docs/legacy/LAB_README_TR.md",
+    "sha256": "2afa615e858f12e5761091f95a4e7eac77a4b6c0343306d13a74bf37c6d004ff"
+  },
+  {
+    "source": "research-simulator/pyproject.toml",
+    "destination": "simulator/pyproject.toml",
+    "sha256": "4271c1bd2e4b660b57b7c51085fcdb1d4d8cd8f1adc0740af6c72c5c5d0e8caf"
+  },
+  {
+    "source": "research-simulator/requirements.lock",
+    "destination": "simulator/requirements.lock",
+    "sha256": "095efb5b56e076117bfa2e4252a4ea7e14c1f70950f987ce039d6cab2c3df723"
+  },
+  {
+    "source": "research-simulator/requirements.txt",
+    "destination": "simulator/requirements.txt",
+    "sha256": "a31f64f4770843dc62eeeee40eb18e5c7258f745a2620a1fa0bfc27035abecb6"
+  },
+  {
+    "source": "research-simulator/QUICK_START.md",
+    "destination": "simulator/QUICK_START.md",
+    "sha256": "60f5da8d386dcd57835db1171415ffe7734f2c7cceb029cee9eb640a27d64a51"
+  },
+  {
+    "source": "research-simulator/scripts/figures.py",
+    "destination": "simulator/scripts/figures.py",
+    "sha256": "0176df02dd59c96adf3694345a3d1a3006bf90aa629c70fa4c63135f37071640"
+  },
+  {
+    "source": "research-simulator/scripts/verify.py",
+    "destination": "simulator/scripts/verify.py",
+    "sha256": "0d4b867267e9ea9910ae05fae35959eb27ed3ef7b3f9c1da903c50007fc04261"
+  },
+  {
+    "source": "research-simulator/scripts/audit_pcap.py",
+    "destination": "simulator/scripts/audit_pcap.py",
+    "sha256": "fd7c828e76b438f8e1872bd3ce8ca01a64f6a1383731813da224b0ea34c5144c"
+  },
+  {
+    "source": "research-simulator/results/observed_summary.json",
+    "destination": "simulator/results/observed_summary.json",
+    "sha256": "7d1229bfc28c380c5521fc46e66c364fca1d4b97945fc8e71ce44c68be3b33ca"
+  },
+  {
+    "source": "research-simulator/results/model_validation.json",
+    "destination": "simulator/results/model_validation.json",
+    "sha256": "c38031dfc70abd4aee5c5d4d97f4b094c8ca3f4f648bc53127220f39b1acb41b"
+  },
+  {
+    "source": "research-simulator/results/monte_carlo_validation.csv",
+    "destination": "simulator/results/monte_carlo_validation.csv",
+    "sha256": "9545488124e22b149611f44089781e2e03ca282de11150ccb4c3b16389a6fb4a"
+  },
+  {
+    "source": "research-simulator/results/replay_validation.csv",
+    "destination": "simulator/results/replay_validation.csv",
+    "sha256": "038ad3fa751b3fd0ad887468a1f2520a83113e03c6dadac877fa308a01d3c8fb"
+  },
+  {
+    "source": "research-simulator/results/test_predictions.csv",
+    "destination": "simulator/results/test_predictions.csv",
+    "sha256": "e9a39ed426691ece573951ca45d6c309f2b13341c1952205611a2a3c289cae6e"
+  },
+  {
+    "source": "research-simulator/results/threshold_080_auxiliary.json",
+    "destination": "simulator/results/threshold_080_auxiliary.json",
+    "sha256": "e4335b93bc5856b8f4ccdab070a170110086a57bdc4c1df2146ae7cfbdb07094"
+  },
+  {
+    "source": "research-simulator/results/threshold_trace_replay.csv",
+    "destination": "simulator/results/threshold_trace_replay.csv",
+    "sha256": "efea0a842698838f0aa7ff02c1b64db3ccb7c0a4fee7346a4f1ca2154d83a891"
+  },
+  {
+    "source": "research-simulator/results/scaling_assumptions.csv",
+    "destination": "simulator/results/scaling_assumptions.csv",
+    "sha256": "48ded5ddf58c2553642b5d58025aa63ddc17eef930058fbd8ab6cef6a55dc4d1"
+  },
+  {
+    "source": "research-simulator/results/figure01_data.csv",
+    "destination": "simulator/results/figure01_data.csv",
+    "sha256": "86a2caefc6a1f5d9785e5d87245f24c650b1613732940d225e9c2ce26a2ae4e0"
+  },
+  {
+    "source": "research-simulator/results/data_audit.json",
+    "destination": "simulator/results/data_audit.json",
+    "sha256": "79165495eb9d93e6f8338b53cbf654668a6e4b59bcbda69cafd2bf1bd345d246"
+  },
+  {
+    "source": "research-simulator/results/pcap_audit.json",
+    "destination": "simulator/results/pcap_audit.json",
+    "sha256": "2087e8c24760b7c8d2c0e1bd92c3a17b27a6b7fb7669a8182259fd77db02e509"
+  },
+  {
+    "source": "research-simulator/results/pcap_byte_audit.csv",
+    "destination": "simulator/results/pcap_byte_audit.csv",
+    "sha256": "b0da5ec2d62153f40a69431656ce12c3275e4a7c4145ccb36576018dff3e59af"
+  },
+  {
+    "source": "research-simulator/results/verification.json",
+    "destination": "simulator/results/verification.json",
+    "sha256": "1d272210c64895aa09b7fd17abf0e09e675a502d77a3b14a448a906e8c0cc2d9"
+  },
+  {
+    "source": "research-simulator/results/offline_installation.json",
+    "destination": "simulator/results/offline_installation.json",
+    "sha256": "879c283436cb1f88cd1fc592f487866d0345ffc19392ec52640dd0f1d1bd1ebf"
+  },
+  {
+    "source": "research-simulator/data/augmented/order_permutations.csv",
+    "destination": "simulator/data/augmented/order_permutations.csv",
+    "sha256": "f3834ab508cc762d15910bee669d40a4c60386b3380d60a0838584804180fbbe"
+  },
+  {
+    "source": "research-simulator/research/METHODS_TR.md",
+    "destination": "simulator/research/METHODS_TR.md",
+    "sha256": "8d15a6ba9a2704b7242f39a6dcd07ca8577f83e32077d6b09a9493d9bb6d39e0"
+  },
+  {
+    "source": "research-simulator/research/RESULTS_TR.md",
+    "destination": "simulator/research/RESULTS_TR.md",
+    "sha256": "ef5764dd73a9b82822c226a9891073c24ed9b872d05c505ca7abdefa22130279"
+  },
+  {
+    "source": "research-simulator/research/DECISIONS_TR.md",
+    "destination": "simulator/research/DECISIONS_TR.md",
+    "sha256": "0b89d699aaa7969b5280840b250b34eb004ecb7e88c9fc64cc3c4cb925cb9be6"
+  },
+  {
+    "source": "research-simulator/research/ARCHITECTURE.md",
+    "destination": "simulator/research/ARCHITECTURE.md",
+    "sha256": "010c7f5b93a3a8f583d62099656781a4f96047d5f6338c745cf0bd63df58c672"
+  },
+  {
+    "source": "research-simulator/research/INTERFACE_V03.md",
+    "destination": "simulator/research/INTERFACE_V03.md",
+    "sha256": "8e52c2ca4dcdc43265e654979f18b3114b6d85a14fef098d8fe050471affde03"
+  },
+  {
+    "source": "research-simulator/references/sources.json",
+    "destination": "simulator/references/sources.json",
+    "sha256": "ba5830a48165c8814659b5456cadbf60d32e0fe0ba57630e6e9aae371e6745aa"
+  }
+]

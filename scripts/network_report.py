@@ -51,14 +51,19 @@ def main():
     p.add_argument('--pcap',type=Path,required=True)
     p.add_argument('--run',type=Path,required=True,help='evaluate.py output directory, same clock as capture')
     p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--ports',type=int,nargs='+',default=[8000,8001],help='Worker HTTP ports to decode and count')
     p.add_argument('--tshark',default='/Applications/Wireshark.app/Contents/MacOS/tshark')
     a=p.parse_args()
     records=[json.loads(l) for l in (a.run/'raw.jsonl').read_text().splitlines()]
     measured=[r for r in records if r['phase']=='measured']
     if not measured: p.error('No measured queries')
-    cmd=[a.tshark,'-n','-r',str(a.pcap),'-d','tcp.port==8000,http',
-         '-Y','tcp.port == 8000 && ip.addr == 192.168.50.11',
+    if not all(1<=port<=65535 for port in a.ports):p.error('Invalid worker port')
+    ports=sorted(set(a.ports))
+    cmd=[a.tshark,'-n','-r',str(a.pcap)]
+    for port in ports:cmd.extend(['-d',f'tcp.port=={port},http'])
+    cmd.extend(['-Y','('+' || '.join(f'tcp.port == {port}' for port in ports)+') && ip.addr == 192.168.50.11',
          '-T','fields','-E','header=y','-E','separator=/t','-E','occurrence=f']
+    )
     for field in FIELDS: cmd.extend(['-e',field])
     proc=subprocess.run(cmd,capture_output=True,text=True,check=True)
     packets=list(csv.DictReader(io.StringIO(proc.stdout),delimiter='\t'))
@@ -67,7 +72,7 @@ def main():
     report=summarize_packets(packets,start,end)
     report.update(pcap=str(a.pcap), warnings=[
         'Capture at mini-1 Ethernet; run evaluator on mini-1 for same-clock windows.',
-        'Only captured port-8000 IPv4 traffic. No loopback, Ollama or Qdrant internal traffic.',
+        f'Only selected IPv4 worker ports {ports}. No loopback, Ollama or Qdrant internal traffic.',
         'frame.len is captured-frame accounting, excludes physical overhead and may be affected by offload.',
         'TX+RX summed across all nodes double-counts mini-to-mini traffic; use unique_captured_bytes.',
         'ACK RTT includes host ACK behavior; HTTP response time includes server work, neither is one-way latency.',

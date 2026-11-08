@@ -1,0 +1,17 @@
+{
+  "unit_tests": 13,
+  "unit_failures": 0,
+  "unit_errors": 0,
+  "api_checks": [
+    "GET /health -> 200",
+    "GET interface HTML/CSS/JS -> 200; correct content types",
+    "Non-whitelisted files are not served",
+    "GET /v1/model -> truthful scope",
+    "POST native simulation -> 200; bounded summary",
+    "POST extrapolation -> explicit assumptions; no invented quality",
+    "POST trained prediction -> 200",
+    "Unsupported empirical configuration -> 422"
+  ],
+  "raw_files_sha256_verified": 89,
+  "status": "passed"
+}

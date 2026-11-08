@@ -1,0 +1,1 @@
+400 calibration questions only, resampled 5000 times per threshold from 0.0 to 1.0 in steps of 0.1. Candidate-list replay, not new vector searches or generated answers. Reference labels are synthetic and nonexhaustive; these rates are not answer accuracy. Consistent markers: semantic blue star, broadcast green square, random orange triangle.

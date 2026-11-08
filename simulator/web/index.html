@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Search Simulator</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><strong>Search Simulator</strong></div>
+    <span class="local"><span aria-hidden="true"></span> Runs on your computer</span>
+  </header>
+  <main>
+    <div class="intro">
+      <h1>Explore a document search setup.</h1>
+      <p>Explore how searching documents across computers could affect waiting time and network traffic. Choose a setup, then select <strong>Estimate results</strong>.</p>
+    </div>
+    <div class="workspace">
+      <section class="panel settings" aria-labelledby="settings-title">
+        <div class="panel-heading"><h2 id="settings-title">Your setup</h2><button type="button" class="text-button" id="reset">Reset</button></div>
+        <form id="scenario-form" novalidate>
+          <label for="mode">What would you like to explore?</label>
+          <select id="mode" name="mode" aria-describedby="mode-note">
+            <option value="empirical">Use the tested setup</option>
+            <option value="trace">Try different match settings</option>
+            <option value="assumption">Explore a different setup</option>
+          </select>
+          <p class="field-note" id="mode-note">Estimates based on our real tests with one or three search computers.</p>
+          <label for="method">How should computers be searched?</label>
+          <select id="method" name="method" aria-describedby="method-note">
+            <option value="broadcast">Search all computers at once</option>
+            <option value="semantic_sequential">Try the most relevant computer first</option>
+            <option value="random_sequential">Try computers in a random order</option>
+            <option value="single_db">Keep all documents on one computer</option>
+          </select>
+          <p class="field-note" id="method-note">Checks every search computer at the same time, then combines the results.</p>
+          <div class="field-row">
+            <div><label for="nodes">Search computers</label><input id="nodes" name="nodes" type="number" min="1" max="64" step="1" value="3" required disabled aria-describedby="nodes-note"></div>
+            <div><label for="threshold">Match strictness</label><input id="threshold" name="threshold" type="number" min="0" max="1" step="0.01" value="0.70" required disabled aria-describedby="threshold-note"></div>
+          </div>
+          <p class="field-note" id="nodes-note">To change the computer count, choose “Explore a different setup” above. One separate computer coordinates the search and is not counted here.</p>
+          <p class="field-note" id="threshold-note">A higher score accepts fewer text passages. This score is not the chance of a correct answer.</p>
+          <div id="owner-field" hidden>
+            <label for="owner-probability">Chance of choosing the right computer first <span class="label-unit">%</span></label>
+            <input id="owner-probability" type="number" min="0" max="100" step="1" value="57" aria-describedby="owner-note">
+            <p class="field-note" id="owner-note">Your assumption about finding the computer that holds the source document. This is not answer accuracy.</p>
+          </div>
+          <label class="check-label" for="generation"><input id="generation" type="checkbox"><span>Include time for AI to write an answer</span></label>
+          <p class="field-note generation-note">Adds estimated writing time; no answer text is generated.</p>
+          <button type="submit" class="primary" id="run"><span id="run-label">Estimate results</span><span id="run-icon" aria-hidden="true">→</span></button>
+          <p class="form-error" id="form-error" role="alert" hidden></p>
+          <details id="advanced">
+            <summary>Optional settings <span aria-hidden="true">+</span></summary>
+            <div class="advanced-fields">
+              <label for="top-k">Matching passages to collect</label><input id="top-k" type="number" min="1" max="5" step="1" value="3" required disabled aria-describedby="top-k-note">
+              <p class="field-note" id="top-k-note">With a one-at-a-time search, stop after this many different passages meet the match score, or after checking every computer. Matching does not guarantee a correct answer.</p>
+              <label for="draws">Simulation repetitions</label><input id="draws" type="number" min="100" max="20000" step="100" value="10000" required aria-describedby="draws-note">
+              <p class="field-note" id="draws-note">More repetitions make the summary steadier. They do not add new real-world tests.</p>
+              <label for="seed">Randomness seed</label><input id="seed" type="number" min="0" max="4294967295" step="1" value="20261020" required aria-describedby="seed-note">
+              <p class="field-note" id="seed-note">Keep this number to reproduce the same simulated results.</p>
+              <div id="assumption-fields" hidden>
+                <label for="extra-rtt">Extra network delay <span class="label-unit">ms per computer</span></label><input id="extra-rtt" type="number" min="0" max="60000" step="0.1" value="0" required aria-describedby="delay-note">
+                <p class="field-note" id="delay-note">Additional waiting time each time a search computer is contacted. 1,000 milliseconds (ms) = 1 second.</p>
+                <label for="service-multiplier">Processing time adjustment</label><input id="service-multiplier" type="number" min="0.01" max="100" step="0.01" value="1" required aria-describedby="processing-note">
+                <p class="field-note" id="processing-note">1 keeps recorded timings. 2 makes recorded computer and coordination delays twice as long. This is an assumption, not a tested hardware upgrade.</p>
+                <label for="bandwidth">Network connection speed <span class="label-unit">Mbps</span></label><input id="bandwidth" type="number" min="0.1" max="100000" step="0.1" placeholder="Keep unchanged" aria-describedby="bandwidth-note">
+                <p class="field-note" id="bandwidth-note">Leave blank to keep transfer costs unchanged. Only a speed below the reference adds waiting time in this version.</p>
+                <label for="reference-bandwidth">Reference connection speed <span class="label-unit">Mbps</span></label><input id="reference-bandwidth" type="number" min="0.1" max="100000" step="0.1" value="1000" required aria-describedby="reference-note">
+                <p class="field-note" id="reference-note">The starting speed assumed for this comparison. It is not a measured network capacity.</p>
+              </div>
+            </div>
+          </details>
+        </form>
+      </section>
+      <section class="panel results" aria-labelledby="results-title" aria-busy="false" id="results-panel">
+        <div class="panel-heading"><h2 id="results-title">Estimated results</h2><span class="badge" id="evidence-badge">Preparing estimate</span></div>
+        <div class="result-heading"><h3 id="result-title">Search all computers at once</h3><p id="result-subtitle">3 search computers · match score 0.70 · collect 3 passages</p></div>
+        <p id="result-status" class="result-status" role="status" aria-live="polite">Preparing your first estimate…</p>
+        <div class="metrics" id="metrics">
+          <article class="metric"><p>Average search time</p><div><strong id="latency-value">—</strong><span id="latency-unit">ms</span></div><small>Time to find and combine source passages</small></article>
+          <article class="metric"><p>Data transferred per search</p><div><strong id="traffic-value">—</strong><span id="traffic-unit">kB</span></div><small>Includes search requests and replies</small></article>
+          <article class="metric"><p>Time for 95% of searches</p><div><strong id="p95-value">—</strong><span id="p95-unit">ms</span></div><small>5% of simulated searches take longer</small></article>
+          <article class="metric"><p>Computers contacted</p><div><strong id="visits-value">—</strong><span>on average</span></div><small>Fewer contacts can mean less network traffic</small></article>
+        </div>
+        <p class="takeaway" id="takeaway">Your estimate will appear here.</p>
+        <div class="generation-result" id="generation-result" hidden><span>Total time, including AI writing</span><strong id="total-value">—</strong></div>
+        <div class="scope" id="scope"><span class="scope-symbol" aria-hidden="true">i</span><div><h4 id="scope-title">How to read this estimate</h4><p id="scope-description">Uses recorded searches from our test setup.</p></div></div>
+        <div class="result-actions"><span id="draw-count">10,000 simulated searches</span><button type="button" class="secondary" id="download" disabled>Download results (.csv) <span aria-hidden="true">↓</span></button></div>
+        <details class="distribution">
+          <summary>More details and definitions</summary>
+          <div class="table-wrap"><table><thead><tr><th scope="col">Measure</th><th scope="col">Average</th><th scope="col">Middle value</th><th scope="col">95% within</th></tr></thead><tbody id="distribution-body"></tbody></table></div>
+          <dl class="definitions">
+            <div><dt>Average</dt><dd>The total across simulated searches divided by their number.</dd></div>
+            <div><dt>Middle value (median)</dt><dd>Half of searches have a lower value and half have a higher one.</dd></div>
+            <div><dt>95th percentile (p95)</dt><dd>95% of simulated searches finish within this time or transfer no more than this amount. It is not a confidence or accuracy score.</dd></div>
+            <div><dt>Passage</dt><dd>A short section of a source document that may help answer a question.</dd></div>
+            <div><dt>ms / kB</dt><dd>1,000 ms = 1 second. 1 kB = 1,000 bytes of transferred data.</dd></div>
+          </dl>
+          <p id="failure-note" class="field-note"></p>
+          <button type="button" class="text-button technical-download" id="download-json" disabled>Download full technical results (.json)</button>
+        </details>
+        <p class="result-footnote">These are estimates across many searches, not a promise for one question. Traffic includes recorded requests and replies, but excludes some physical network overhead. This version models one search at a time.</p>
+      </section>
+    </div>
+    <footer><span>Reference data: Apple M2 · 8 GB memory · 12 books · 16,421 passages</span><span>Runs locally · Model v0.1</span></footer>
+  </main>
+</body>
+</html>

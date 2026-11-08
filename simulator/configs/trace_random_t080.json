@@ -1,0 +1,1 @@
+{"method":"random_sequential","mode":"trace","nodes":3,"draws":10000,"seed":20261020,"threshold":0.8,"top_k":3}

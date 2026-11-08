@@ -1,0 +1,21 @@
+{
+  "source": "archived categorical coordinator configuration",
+  "source_sha256": "180b6faf0925616efdc54ceff93d3d28be0fda7aa83f8f56377e9d6b14eacf73",
+  "nodes": [
+    {
+      "id": "mini-2",
+      "url": "http://192.168.50.12:8000",
+      "description": "Gothic horror and speculative science fiction: Frankenstein by Mary Shelley, Dracula by Bram Stoker, Dr Jekyll and Mr Hyde by Robert Louis Stevenson, The Time Machine by H G Wells. Monsters, scientific experiments, supernatural threats, transformation, time travel. Characters Victor Frankenstein, the creature, Jonathan Harker, Mina, Lucy, Van Helsing, Jekyll, Hyde, Utterson, the Time Traveller, Eloi and Morlocks."
+    },
+    {
+      "id": "mini-3",
+      "url": "http://192.168.50.13:8000",
+      "description": "Detective mysteries by Arthur Conan Doyle: The Hound of the Baskervilles, The Adventures of Sherlock Holmes, A Study in Scarlet, The Sign of the Four. Sherlock Holmes and Dr Watson investigate crimes, clues, murders and disappearances. London, Baker Street, Dartmoor, Baskerville, Mortimer, Mary Morstan, Sholto, Jefferson Hope."
+    },
+    {
+      "id": "mini-4",
+      "url": "http://192.168.50.14:8000",
+      "description": "Jane Austen social and romantic novels: Persuasion, Pride and Prejudice, Emma, Sense and Sensibility. Courtship, marriage, family, class, inheritance, social manners. Anne Elliot, Captain Wentworth, Elizabeth Bennet, Darcy, Emma Woodhouse, Knightley, Elinor and Marianne Dashwood, Edward Ferrars, Colonel Brandon, Willoughby."
+    }
+  ]
+}

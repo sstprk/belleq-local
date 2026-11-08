@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 import secrets
+import random
 import time
 import uuid
 from contextlib import asynccontextmanager
@@ -21,7 +22,8 @@ class Query(BaseModel):
     query: str = Field(min_length=1, max_length=2000, pattern=r'\S')
     top_k: int = Field(default=3, ge=1, le=100)
     per_node_k: int | None = Field(default=None, ge=1, le=200)
-    mode: Literal["broadcast", "semantic_sequential"] | None = None
+    mode: Literal["broadcast", "semantic_sequential", "random_sequential"] | None = None
+    random_seed: int = 0
     min_score: float | None = Field(default=None, ge=-1, le=1, allow_inf_nan=False)
     allow_partial: bool = False
     query_id: str = Field(default_factory=lambda: str(uuid.uuid4()), max_length=64)
@@ -150,14 +152,20 @@ def create_app(settings=None, backend=None, node_client=None):
         started = time.perf_counter()
         mode = q.mode or s.retrieval_mode
         threshold = q.min_score if q.min_score is not None else (
-            s.relevance_threshold if mode == 'semantic_sequential' else None)
-        per_k = q.per_node_k or (max(5, q.top_k) if mode == 'semantic_sequential' else q.top_k)
+            s.relevance_threshold if mode != 'broadcast' else None)
+        per_k = q.per_node_k or (max(5, q.top_k) if mode != 'broadcast' else q.top_k)
         ranking = []
         router_ms = 0.0
         catalogue_ms = 0.0
         query_embedding_ms = 0.0
         catalogue_built = False
         ordered_nodes = s.nodes
+        if mode == 'random_sequential':
+            router_started = time.perf_counter()
+            ordered_nodes = list(s.nodes)
+            random.Random(q.random_seed).shuffle(ordered_nodes)
+            ranking = [{'node_id': n.id, 'random_position': i} for i, n in enumerate(ordered_nodes)]
+            router_ms = (time.perf_counter()-router_started)*1000
         if mode == 'semantic_sequential':
             if any(not n.description.strip() for n in s.nodes):
                 raise HTTPException(422, 'Semantic routing requires a description for every node')
@@ -257,7 +265,8 @@ def create_app(settings=None, backend=None, node_client=None):
                               'skipped_nodes': [n.id for n in ordered_nodes if n.id not in visited],
                               'min_score': threshold, 'target_chunks': q.top_k,
                               'target_reached': target_reached,
-                              'stop_reason': ('target_reached' if mode == 'semantic_sequential'
+                              'random_seed': q.random_seed if mode == 'random_sequential' else None,
+                              'stop_reason': ('target_reached' if mode != 'broadcast'
                                               and target_reached else 'all_nodes_visited'),
                               'catalogue_built': catalogue_built}, 'failed_nodes': failed,
                   'nodes': statuses, 'chunks': hits, 'fingerprint': app.state.backend.fingerprint,

@@ -1,0 +1,143 @@
+{
+  "aggregate_ms": {
+    "selected": "method_mean",
+    "ridge": {
+      "alpha": 100.0,
+      "center": [
+        0.2490613266583229,
+        0.2503128911138924,
+        0.2503128911138924,
+        0.2503128911138924,
+        68.82978723404256,
+        12.087609511889863
+      ],
+      "scale": [
+        0.43246940032968295,
+        0.43319319899566505,
+        0.43319319899566316,
+        0.43319319899566244,
+        14.662359797226237,
+        2.6652793118118314
+      ],
+      "coefficients": [
+        151.47466027341147,
+        -99.39704871690085,
+        59.26444896312152,
+        -111.08896984948755,
+        -27.425481132489615,
+        43.548714218271755
+      ],
+      "intercept": 578.8237735112502
+    },
+    "method_mean": {
+      "semantic_sequential": 945.6623495778606,
+      "broadcast": 338.76003508498115,
+      "random_sequential": 722.2031670575001,
+      "single_db": 310.5037352049919
+    },
+    "features": [
+      "method_semantic",
+      "method_broadcast",
+      "method_random",
+      "method_single_db",
+      "question_utf8_bytes",
+      "question_words"
+    ],
+    "calibration_cases": 400,
+    "test_cases_excluded": 100
+  },
+  "network_frame_bytes": {
+    "selected": "method_mean",
+    "ridge": {
+      "alpha": 10.0,
+      "center": [
+        0.2490613266583229,
+        0.2503128911138924,
+        0.2503128911138924,
+        0.2503128911138924,
+        68.82978723404256,
+        12.087609511889863
+      ],
+      "scale": [
+        0.43246940032968295,
+        0.43319319899566505,
+        0.43319319899566316,
+        0.43319319899566244,
+        14.662359797226237,
+        2.6652793118118314
+      ],
+      "coefficients": [
+        -245.229168964333,
+        2473.3345688098334,
+        655.7594517708985,
+        -2884.2745915325827,
+        -743.6989413007689,
+        1081.6036199446962
+      ],
+      "intercept": 12829.045056320401
+    },
+    "method_mean": {
+      "semantic_sequential": 12258.502512562814,
+      "broadcast": 18565.335,
+      "random_sequential": 14349.89,
+      "single_db": 6139.6
+    },
+    "features": [
+      "method_semantic",
+      "method_broadcast",
+      "method_random",
+      "method_single_db",
+      "question_utf8_bytes",
+      "question_words"
+    ],
+    "calibration_cases": 400,
+    "test_cases_excluded": 100
+  },
+  "client_ms": {
+    "selected": "ridge",
+    "ridge": {
+      "alpha": 0.1,
+      "center": [
+        0.2490613266583229,
+        0.2503128911138924,
+        0.2503128911138924,
+        0.2503128911138924,
+        68.82978723404256,
+        12.087609511889863
+      ],
+      "scale": [
+        0.43246940032968295,
+        0.43319319899566505,
+        0.43319319899566316,
+        0.43319319899566244,
+        14.662359797226237,
+        2.6652793118118314
+      ],
+      "coefficients": [
+        172.3574358002614,
+        -89.12584870604235,
+        35.23730360209722,
+        -118.18090815567056,
+        249.36896824442246,
+        -316.2350788253272
+      ],
+      "intercept": 2461.544548414274
+    },
+    "method_mean": {
+      "semantic_sequential": 2860.477794902027,
+      "broadcast": 2255.8906137450194,
+      "random_sequential": 2542.988811454999,
+      "single_db": 2188.815639787489
+    },
+    "features": [
+      "method_semantic",
+      "method_broadcast",
+      "method_random",
+      "method_single_db",
+      "question_utf8_bytes",
+      "question_words"
+    ],
+    "calibration_cases": 400,
+    "test_cases_excluded": 100
+  }
+}

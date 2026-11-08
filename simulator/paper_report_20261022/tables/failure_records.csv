@@ -1,0 +1,3 @@
+﻿case_id,experiment_method,http_status,error,network_frame_bytes,raw_response_json
+pg43-002,semantic_sequential,503,,0.0,"{""detail"": ""Dependency unavailable or embedding changed""}"
+pg158-011,semantic_sequential,503,,0.0,"{""detail"": ""Dependency unavailable or embedding changed""}"

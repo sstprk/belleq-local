@@ -29,7 +29,7 @@ class Settings(BaseModel):
     node_timeout: float = Field(default=60, gt=0)
     backend_timeout: float = Field(default=120, gt=0)
     nodes: list[Node] = Field(default_factory=list)
-    retrieval_mode: Literal["broadcast", "semantic_sequential"] = "broadcast"
+    retrieval_mode: Literal["broadcast", "semantic_sequential", "random_sequential"] = "broadcast"
     relevance_threshold: float = Field(default=0.70, ge=-1, le=1, allow_inf_nan=False)
     max_upload_bytes: int = 20 * 1024 * 1024
     api_key: str = ""  # set using BELLEQ_API_KEY, never commit secrets

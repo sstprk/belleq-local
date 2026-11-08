@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "steps": [
+    "Clean venv installation from locked local wheels with --no-index",
+    "Trained JSON artifacts loaded and prediction returned in fresh environment",
+    "Monte Carlo inference completed without external service calls"
+  ],
+  "python": "3.12.14",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "scope": "macOS ARM64 Python 3.12 wheels; no-index dependency installation. Not a firewall-level network isolation test."
+}

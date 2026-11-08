@@ -1,0 +1,36 @@
+{
+  "node_id": "mini-1",
+  "coordinator": true,
+  "bind": "192.168.50.11",
+  "port": 8000,
+  "collection": "lab_categorical_v1",
+  "qdrant_url": "http://127.0.0.1:6333",
+  "ollama_url": "http://127.0.0.1:11434",
+  "embedding_model": "nomic-embed-text:latest",
+  "embedding_dimension": 768,
+  "embedding_digest": "",
+  "distance": "Cosine",
+  "generation_model": "qwen3:1.7b",
+  "generation_url": "http://127.0.0.1:11434",
+  "node_timeout": 120,
+  "backend_timeout": 120,
+  "nodes": [
+    {
+      "id": "mini-2",
+      "url": "http://192.168.50.12:8000",
+      "description": "Gothic horror and speculative science fiction: Frankenstein by Mary Shelley, Dracula by Bram Stoker, Dr Jekyll and Mr Hyde by Robert Louis Stevenson, The Time Machine by H G Wells. Monsters, scientific experiments, supernatural threats, transformation, time travel. Characters Victor Frankenstein, the creature, Jonathan Harker, Mina, Lucy, Van Helsing, Jekyll, Hyde, Utterson, the Time Traveller, Eloi and Morlocks."
+    },
+    {
+      "id": "mini-3",
+      "url": "http://192.168.50.13:8000",
+      "description": "Detective mysteries by Arthur Conan Doyle: The Hound of the Baskervilles, The Adventures of Sherlock Holmes, A Study in Scarlet, The Sign of the Four. Sherlock Holmes and Dr Watson investigate crimes, clues, murders and disappearances. London, Baker Street, Dartmoor, Baskerville, Mortimer, Mary Morstan, Sholto, Jefferson Hope."
+    },
+    {
+      "id": "mini-4",
+      "url": "http://192.168.50.14:8000",
+      "description": "Jane Austen social and romantic novels: Persuasion, Pride and Prejudice, Emma, Sense and Sensibility. Courtship, marriage, family, class, inheritance, social manners. Anne Elliot, Captain Wentworth, Elizabeth Bennet, Darcy, Emma Woodhouse, Knightley, Elinor and Marianne Dashwood, Edward Ferrars, Colonel Brandon, Willoughby."
+    }
+  ],
+  "retrieval_mode": "semantic_sequential",
+  "relevance_threshold": 0.7
+}

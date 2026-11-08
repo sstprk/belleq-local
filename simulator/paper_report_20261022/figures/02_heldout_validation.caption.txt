@@ -1,0 +1,1 @@
+400 calibration questions, 100 held-out questions, each with four method observations. 10000 Monte Carlo draws per method. Distribution-level validation in the original sessions only; not validation at new worker counts.

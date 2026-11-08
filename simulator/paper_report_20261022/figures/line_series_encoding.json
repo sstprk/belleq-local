@@ -1,0 +1,17 @@
+{
+  "semantic_sequential": {
+    "color": "#0072B2",
+    "marker": "*",
+    "markersize": 11
+  },
+  "broadcast": {
+    "color": "#009E73",
+    "marker": "s",
+    "markersize": 7
+  },
+  "random_sequential": {
+    "color": "#D55E00",
+    "marker": "^",
+    "markersize": 7
+  }
+}

@@ -1,0 +1,1 @@
+Real .70 observations; 500 questions/method. Retrieval excludes generation. Traffic uses all attempts; latency uses complete requests. Error bars: question-bootstrap 95% CI of mean, not between-session uncertainty.

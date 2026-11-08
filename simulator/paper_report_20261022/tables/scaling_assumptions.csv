@@ -1,0 +1,25 @@
+﻿nodes,method,mean_ms,p95_ms,mean_frame_bytes,mean_visits,draws,evidence
+1,semantic_sequential,622.8043039316807,636.5050410004187,6324.8340624176835,1.0,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+1,broadcast,331.8282239156808,340.37037500002043,6162.531975873542,1.0,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+1,random_sequential,331.8282239156808,340.37037500002043,6228.19553362472,1.0,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+2,semantic_sequential,835.1365307490181,970.5158349988778,10352.023343543242,1.64,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+2,broadcast,334.8826110566832,341.94198749964926,12367.95476178872,2.0,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+2,random_sequential,548.3402358690394,676.2230419999469,10293.075158140997,1.653,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+3,semantic_sequential,996.3030919383643,1305.1835000005667,13387.936235856181,2.1266666666666665,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+3,broadcast,335.7095732003383,342.9330583501268,18553.902761182228,3.0,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+3,random_sequential,754.6899096500321,1010.7900410002912,14170.803182272173,2.276,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+4,semantic_sequential,1165.521816209363,1639.1877008020629,16572.39588547675,2.6366666666666667,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+4,broadcast,336.1703800693464,344.0211659999477,24763.55062122805,4.0,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+4,random_sequential,933.0489233997138,1346.086292000109,17498.380587439395,2.8133333333333335,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+6,semantic_sequential,1444.0561022087174,2309.3942886004697,21843.879510046376,3.4783333333333335,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+6,broadcast,336.3973083550104,343.4834999998202,37144.58478834766,6.0,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+6,random_sequential,1335.8627059853918,2016.0559624986033,25062.624449327002,4.03,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+8,semantic_sequential,1744.0382411003598,2980.3147109996644,27525.5525829534,4.3886666666666665,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+8,broadcast,336.72445047567925,344.007208000221,49549.30002495861,8.0,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+8,random_sequential,1672.6521773123518,2688.4447666492633,31361.62678877438,5.045333333333334,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+12,semantic_sequential,2286.208649413094,4321.043425500011,37716.95047761,6.027666666666667,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+12,broadcast,336.4407881833363,344.0403330000663,74325.70394060324,12.0,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+12,random_sequential,2355.420644715053,4032.23571259482,44183.56586323664,7.106,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+16,semantic_sequential,2816.696828923089,5661.880408999423,47746.528848312475,7.634,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+16,broadcast,336.5803562060113,344.0211659999477,99096.49126446358,16.0,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57
+16,random_sequential,3047.516010026712,5373.922039993886,57139.448428986725,9.194,3000,unvalidated assumptions; one owner and N-1 virtual distractor archetypes; owner-first=.57

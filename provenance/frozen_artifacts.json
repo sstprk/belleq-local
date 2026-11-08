@@ -1,0 +1,10 @@
+{
+  "preserved_from": "2026-10-20 research calibration",
+  "files": {
+    "simulator/artifacts/calibration.json": "1341b2d2fc49a153e2b0c34b678a9e614e8b000c7e873f98c9e4652fbecb02a9",
+    "simulator/artifacts/model_card.json": "390c7a6f72544ee39f0d2bfc4d18137d535fb23b27b20b62c27019fd9b79e252",
+    "simulator/artifacts/trace_library.json": "855e4922527940716dee7a4ef7fbafe72399f6b18b8be36e880d23ea98c97a8c",
+    "simulator/artifacts/split.json": "83143a4439dc23a7df13ff303ed43e967b4cd72cd50b350ef54c8ac0411b497a",
+    "simulator/artifacts/regressors.json": "10794442cfe11ee65666e5b8720bd26de363e80c4b95eeb87aba62ff1cce5066"
+  }
+}

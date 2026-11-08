@@ -1,0 +1,31 @@
+{
+  "time_utc": "2026-11-08T11:59:21.200413+00:00",
+  "status": "passed",
+  "checks": [
+    "GET /",
+    "GET /app.js",
+    "GET /style.css",
+    "GET /health",
+    "GET /v1/model",
+    "GET /api/index?endpoint=model",
+    "simulate broadcast empirical",
+    "simulate semantic_sequential empirical",
+    "simulate random_sequential empirical",
+    "simulate single_db empirical",
+    "simulate semantic_sequential trace",
+    "simulate broadcast assumption",
+    "assumption quality suppressed",
+    "simulate semantic_sequential assumption",
+    "assumption quality suppressed",
+    "rewritten POST",
+    "native expected values",
+    "point prediction",
+    "invalid input {'draws': 20001}",
+    "invalid input {'nodes': 8}",
+    "invalid input {'draws': 0}",
+    "invalid input []",
+    "invalid input {'threshold': 'bad'}",
+    "unknown path"
+  ],
+  "real_vercel_deployment_tested": false
+}

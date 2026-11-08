@@ -1,0 +1,30 @@
+[
+  {
+    "id": "ridge",
+    "url": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Ridge.html",
+    "purpose": "Ridge objective and regularization; our NumPy implementation is tested separately.",
+    "snapshot": "ridge.html",
+    "sha256": "143244c41f38ba1f360c4bb9785e1b91be994cd16e4c6190d9bd72431c30405f"
+  },
+  {
+    "id": "group_split",
+    "url": "https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GroupShuffleSplit.html",
+    "purpose": "Question groups must remain disjoint across splits; implemented as seeded permutation of unique case IDs.",
+    "snapshot": "group_split.html",
+    "sha256": "2a5dd39dfd4a616ee53451dd754405b76f82da3dc731a0ca30703b2185389bc5"
+  },
+  {
+    "id": "bootstrap",
+    "url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.bootstrap.html",
+    "purpose": "Bootstrap resampling concept; percentile mean CIs implemented with NumPy, not SciPy.",
+    "snapshot": "bootstrap.html",
+    "sha256": "681a10622e6fa1520fea015ed884e53272ca26d8be1029ab536059d926a52477"
+  },
+  {
+    "id": "extrapolation",
+    "url": "https://www.itl.nist.gov/div898/handbook/pri/section5/pri5998.htm",
+    "purpose": "Distinguishing interpolation/extrapolation and need for validation outside measured domain.",
+    "snapshot": "extrapolation.html",
+    "sha256": "31f96727d3591ea9e29b3a562ba6804fb662b54283361a8a3bdb76d44e61bce0"
+  }
+]

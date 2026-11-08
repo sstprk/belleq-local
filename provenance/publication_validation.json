@@ -1,0 +1,26 @@
+{
+  "status": "passed",
+  "date": "2026-11-08",
+  "python": "3.12.14",
+  "platform": "Darwin arm64",
+  "lab_unit_tests": 38,
+  "simulator_unit_tests": 13,
+  "simulator_local_api_checks": 8,
+  "web_adapter_http_checks": 24,
+  "public_research_input_hashes": 89,
+  "frozen_model_files_identical_after_separate_training": 5,
+  "numeric_figure_tables_reproduced": 4,
+  "main_csv_rows_preserved_except_source_csv_paths": 2000,
+  "pcap_query_byte_windows_recomputed": 2000,
+  "pcap_byte_mismatches": 0,
+  "cff_schema_validation": "passed using cffconvert 2.0.0 / CFF 1.2.0",
+  "uv_lock_check": "passed offline; fresh uv --frozen install passed",
+  "release_archive_files_pattern_scanned": 90,
+  "known_credential_patterns_found": 0,
+  "new_physical_mac_mini_run": false,
+  "limitations": [
+    "Unit service tests use mocked dependencies; no new hardware experiment.",
+    "Credential pattern scans are targeted checks, not universal guarantees.",
+    "Historical software/model results retain their original scope and limitations."
+  ]
+}

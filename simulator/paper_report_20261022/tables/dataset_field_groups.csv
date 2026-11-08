@@ -1,0 +1,7 @@
+﻿group,examples,interpretation
+Identity and design,"case_id, sample_id, experiment_method, placement, run_id, split","One row is one query under one policy, not one physical setup."
+Question and provenance,"question, book_id, source_url, evidence_quote, relevant_hashes_json",Synthetic source-linked labels are nonexhaustive and not human reviewed.
+Retrieved context and answer,"answer, expected_answer, chunks_json, raw_response_json",Raw model output is preserved; expected_answer is not a human correctness judgment.
+Timing and routing,"router_ms, aggregate_ms, generation_ms, client_ms, visited_nodes_json","Application timing separates routing, retrieval and generation."
+Worker instrumentation,"miniN_embedding_ms, miniN_search_ms, miniN_round_trip_ms, miniN_status",Per-worker values are observed only when the worker is queried and the field is recorded.
+Traffic and transport,"network_frame_bytes, miniN_network_ack_rtt_ms_mean, miniN_network_tx_mbps","Frame counts, TCP ACK RTT and window-averaged rates have distinct meanings."

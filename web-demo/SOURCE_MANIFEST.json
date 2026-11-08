@@ -1,0 +1,92 @@
+{
+  "source_app_version": "0.3.0",
+  "model_version": "0.1.0",
+  "model_artifacts_unchanged": true,
+  "files": [
+    {
+      "source": "src/belleq_sim/__init__.py",
+      "destination": "src/belleq_sim/__init__.py",
+      "source_sha256": "44c20f50c51777e3dcc83d92511f7d1b78b538314c437493199e38e3e583eb6c",
+      "deployed_sha256": "44c20f50c51777e3dcc83d92511f7d1b78b538314c437493199e38e3e583eb6c",
+      "identical": true
+    },
+    {
+      "source": "src/belleq_sim/common.py",
+      "destination": "src/belleq_sim/common.py",
+      "source_sha256": "f3aaf2346487b2ca0ca52fa36488860095c55519ed8335328a73de322e84fcff",
+      "deployed_sha256": "f3aaf2346487b2ca0ca52fa36488860095c55519ed8335328a73de322e84fcff",
+      "identical": true
+    },
+    {
+      "source": "src/belleq_sim/engine.py",
+      "destination": "src/belleq_sim/engine.py",
+      "source_sha256": "6814ecfc760bff888d13d99aba9688b4e8df795c65d84ecb76ff81e2f7314424",
+      "deployed_sha256": "6814ecfc760bff888d13d99aba9688b4e8df795c65d84ecb76ff81e2f7314424",
+      "identical": true
+    },
+    {
+      "source": "src/belleq_sim/ridge.py",
+      "destination": "src/belleq_sim/ridge.py",
+      "source_sha256": "9c84e20ae23fa4133e458407b39533fc7f5d45ababafff5e2f40c5bbaeb52e0b",
+      "deployed_sha256": "9c84e20ae23fa4133e458407b39533fc7f5d45ababafff5e2f40c5bbaeb52e0b",
+      "identical": true
+    },
+    {
+      "source": "src/belleq_sim/replay.py",
+      "destination": "src/belleq_sim/replay.py",
+      "source_sha256": "1f4eca073ae901f7806f4cb42d2e5201a643ba571b3cc556f059c626236fdeef",
+      "deployed_sha256": "1f4eca073ae901f7806f4cb42d2e5201a643ba571b3cc556f059c626236fdeef",
+      "identical": true
+    },
+    {
+      "source": "artifacts/calibration.json",
+      "destination": "artifacts/calibration.json",
+      "source_sha256": "1341b2d2fc49a153e2b0c34b678a9e614e8b000c7e873f98c9e4652fbecb02a9",
+      "deployed_sha256": "1341b2d2fc49a153e2b0c34b678a9e614e8b000c7e873f98c9e4652fbecb02a9",
+      "identical": true
+    },
+    {
+      "source": "artifacts/trace_library.json",
+      "destination": "artifacts/trace_library.json",
+      "source_sha256": "855e4922527940716dee7a4ef7fbafe72399f6b18b8be36e880d23ea98c97a8c",
+      "deployed_sha256": "855e4922527940716dee7a4ef7fbafe72399f6b18b8be36e880d23ea98c97a8c",
+      "identical": true
+    },
+    {
+      "source": "artifacts/regressors.json",
+      "destination": "artifacts/regressors.json",
+      "source_sha256": "10794442cfe11ee65666e5b8720bd26de363e80c4b95eeb87aba62ff1cce5066",
+      "deployed_sha256": "10794442cfe11ee65666e5b8720bd26de363e80c4b95eeb87aba62ff1cce5066",
+      "identical": true
+    },
+    {
+      "source": "artifacts/model_card.json",
+      "destination": "artifacts/model_card.json",
+      "source_sha256": "390c7a6f72544ee39f0d2bfc4d18137d535fb23b27b20b62c27019fd9b79e252",
+      "deployed_sha256": "390c7a6f72544ee39f0d2bfc4d18137d535fb23b27b20b62c27019fd9b79e252",
+      "identical": true
+    },
+    {
+      "source": "web/index.html",
+      "destination": "public/index.html",
+      "source_sha256": "931969acca4ae5e3fb81bbf313235e72a433247d66a6d58e7943aedcd0433237",
+      "deployed_sha256": "5412a8876644d16f01e40e6d127cff93df9955d04444119de79f1b225272ff4a",
+      "identical": false
+    },
+    {
+      "source": "web/app.js",
+      "destination": "public/app.js",
+      "source_sha256": "9815fe6a06304ead3a9792b3ba30a2ab0309e99b0524241cc555fb650e98997e",
+      "deployed_sha256": "6712399f73bba33887d73dcfc52e476aaf5ca020ee309105dea2aa47525c86f2",
+      "identical": false
+    },
+    {
+      "source": "web/style.css",
+      "destination": "public/style.css",
+      "source_sha256": "a049e1dd03e15f011fa13125e9e8bb9785b8de7d586f1905f7da54ec2a44abb4",
+      "deployed_sha256": "a049e1dd03e15f011fa13125e9e8bb9785b8de7d586f1905f7da54ec2a44abb4",
+      "identical": true
+    }
+  ],
+  "hosting_changes": "Read-only serverless handler; no automatic local file persistence; hosted UI labels; inference engine and model files unchanged."
+}

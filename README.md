@@ -1,258 +1,244 @@
-# Belleq Lab
+# Belleq Local
 
-Belleq'in belge alma ve retrieval çekirdeğinden türetilmiş bağımsız deney servisi.
-Her mini kendi Qdrant verisini tutar. Koordinatör HTTP üzerinden yerel sorgu
-API'lerini broadcast veya semantic sıralı modda çağırır, ortak top-k'yi oluşturur ve isteğe bağlı olarak
-kanıtları Ollama'daki Qwen modeline gönderir. MCP, model bölme veya eğitim yoktur.
+**A reproducible laboratory for distributed knowledge retrieval, network
+measurement and empirical simulation.**
 
-## Mimari ve kararlar
+[![Tests](https://github.com/sstprk/belleq-local/actions/workflows/ci.yml/badge.svg)](https://github.com/sstprk/belleq-local/actions/workflows/ci.yml)
+[![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-- `POST /query` ve `/v1/retrieve/local`: yalnızca bu mini'de arama.
-- `POST /v1/retrieve/aggregate`: seçilen moda göre paralel veya erken duran sıralı arama.
-- `POST /v1/answer`: aggregate + prompt'a kanıt ekleme + cevap üretimi.
-- `POST /v1/documents/text`: JSON metin yükleme.
-- `POST /v1/documents/upload`: PDF, DOCX, TXT, MD, HTML yükleme.
-- `GET /health/live`, `/health/ready`: süreç ve bağımlılık kontrolleri.
-- `/docs`: OpenAPI etkileşimli API belgesi.
+Belleq Local searches independent document collections over HTTP, combines the
+retrieved passages and optionally asks a local Qwen model to answer from them.
+The accompanying simulator estimates latency and captured traffic from recorded
+experiments and exposes a simple English web interface.
 
-Yeni mini-1 şablonunda semantic sıralı mod açıktır; eski config'ler broadcast kalır. İsteklerde `top_k` belirtilmezse yeni varsayılan 3'tür.
+This repository contains **both the real lab system and the simulator**. You can
+try the simulator on one computer without Qdrant, Ollama, an account or access to
+the lab. The lab service requires the separate setup described below.
 
-Varsayılan coordinator mini-1 (.11); arama düğümleri mini-2/3/4 (.12/.13/.14).
-Mini-1'in yerel retrieval servisi de hazırdır. Kendi verisini de aramak için
-`nodes` listesine `{"id":"mini-1","url":"http://192.168.50.11:8000"}` eklenebilir.
-Koordinatöre geri dönen çağrı sadece `/v1/retrieve/local` olur; recursive aggregation yoktur.
-İlk deneyde mini-1'i arama listesi dışında bırakmak, Qwen ile worker kaynaklarının
-karışmasını azaltır. Yine de mini-1'de yerel Qdrant ve embedding modeli kurulur.
+**Research scope:** four M2 Mac minis with 8 GB RAM, one coordinator, three search
+workers, 12 novels, 16,421 chunks and 500 shared synthetic questions. The main
+comparison contains 2,000 real attempts at score threshold 0.70; two attempts
+failed. This is application-level distributed retrieval, **not** native Qdrant
+clustering, distributed LLM training, model sharding or federated learning.
 
-Bu Qdrant native cluster değil: bağımsız DB'lerin uygulama katmanında birleşmesidir.
-Broadcast modunda bütün çalışanlara aynı soru gider. Semantic sıralı mod için [ROUTING.md](ROUTING.md) belgesine bak. Her worker kendi query
-embedding'ini hesaplar. Dolayısıyla ölçülen süre embedding maliyetini de içerir;
-`embedding_ms` ve `search_ms` ayrıdır. Embedding'i koordinatörde bir kere üretmek
-ayrı bir sonraki deney olabilir; bu uygulama onu sessizce yapmaz.
+## Start here
 
-## Mac mini kurulumu (her cihazda)
+| Goal | Guide |
+|---|---|
+| Try the local web simulator | [Quick start below](#quick-start-the-simulator) and [simulator guide](simulator/README.md) |
+| Install the four-computer lab | [Detailed Mac mini setup](docs/LAB_SETUP.md) |
+| Upload books and run the policies | [Experiment protocol](docs/EXPERIMENTS.md) |
+| Use the HTTP endpoints | [API catalog](docs/API.md) |
+| Download the recorded research inputs | [Data and licenses](docs/DATA.md) |
+| Rebuild models, figures and checks | [Reproducibility guide](docs/REPRODUCIBILITY.md) |
+| Understand the results and limits | [Results](docs/RESULTS.md) |
+| Run tests or contribute | [Testing](docs/TESTING.md) and [contribution guide](CONTRIBUTING.md) |
+| Host the optional stateless demo | [Web demo guide](docs/WEB_DEMO.md) |
 
-Önkoşul: macOS 14+, Apple Silicon, Python 3.12; mevcut lab macOS 26.2 uygundur.
-Sabit Ethernet adresleri ve SSH hazır olmalı. Wi-Fi ilk indirmeler için açık kalabilir.
+## Quick start the simulator
+
+Use **Python 3.12**. Internet is needed once to install packages; inference then
+works offline. Commands below are for macOS/Linux and run from a source checkout.
 
 ```bash
-# SSH içinde Homebrew yolu görünmüyorsa:
-eval "$(/opt/homebrew/bin/brew shellenv)"
-brew install python@3.12 uv
+git clone https://github.com/sstprk/belleq-local.git
+cd belleq-local
+git checkout v0.2.0
+cd simulator
+python3.12 -m venv .venv
+.venv/bin/python -m pip install -r requirements.lock
+PYTHONPATH=src .venv/bin/python -m belleq_sim serve --port 8010
 ```
 
-### Ollama: macOS üzerinde yerel çalıştır
+Open **http://127.0.0.1:8010**. Leave the terminal open and stop with **Ctrl+C**.
+On macOS, subsequent starts can use `simulator/start.command`. In Windows use
+`.venv\Scripts\python.exe`, set `PYTHONPATH=src`, and run the same module; this
+release was not physically validated on Windows.
 
-Resmî macOS uygulamasını https://ollama.com/download/mac adresinden yükle ve aç.
-Ollama'yı Qdrant'ın Linux container'ına koyma; model servisi Mac üzerinde çalışsın.
-Resmî platform desteği: https://docs.ollama.com/macos (Apple M serisinde CPU/GPU).
-CLI kurulumunu ve API'yi kontrol et:
+The default broadcast estimate is approximately **339 ms**, **18.6 kB/search**
+and **3 search computers contacted**. These are modeled retrieval results, not
+the HTTP response time of the demonstration site. Including AI-writing time
+samples recorded durations; it does not call an LLM or generate a new answer.
 
-```bash
-ollama --version
-curl --fail http://127.0.0.1:11434/api/tags
-ollama pull nomic-embed-text:latest
-# Yalnızca koordinatörde; 8 GB için küçük başlangıç modeli:
-ollama pull qwen3:1.7b
+The UI offers three evidence levels:
+
+- **Measured settings / `empirical`:** joint resampling of real query-policy
+  records at the native one-worker or three-worker configuration.
+- **Recorded candidates / `trace`:** replay of the saved five candidates per
+  worker with a different threshold or stopping rule. No new vector search.
+- **Different setup / `assumption`:** explicit hypothetical worker-count and
+  cost settings. Unseen scales, larger corpora, queues and saturation are not
+  validated. This mode deliberately does not predict retrieval quality.
+
+The full local UI records runs under `simulator/results/ui_runs/`; CSV and JSON
+can also be downloaded. These records are labeled simulations, not experiments.
+
+## Real lab architecture
+
+```mermaid
+flowchart LR
+    Client[MacBook or experiment runner] -->|HTTP query| C[mini-1 coordinator]
+    C -->|local retrieval HTTP| W2[mini-2 API]
+    C -->|local retrieval HTTP| W3[mini-3 API]
+    C -->|local retrieval HTTP| W4[mini-4 API]
+    W2 --> E2[Local embedding model]
+    W2 --> D2[(Local Qdrant)]
+    W3 --> E3[Local embedding model]
+    W3 --> D3[(Local Qdrant)]
+    W4 --> E4[Local embedding model]
+    W4 --> D4[(Local Qdrant)]
+    C --> M[Deduplicate and select global top k]
+    M -->|Optional prompt context| L[Local Qwen on mini-1]
+    L --> Client
 ```
 
-Bu pakette Ollama binary'si dağıtılmaz. Deney öncesi tüm cihazlarda aynı sürümü
-kullan, `ollama --version` ve `/api/tags` çıktısını kaydet. Model etiketi değişebilir:
-`/api/tags` içindeki embedding `digest` değerini dört config'in `embedding_digest`
-alanına sabitle. Aynı tag altında farklı dosyalar varsa aggregator reddeder.
-İlk başlangıçta digest boş bırakılabilir; gerçek digest otomatik okunur ve DB şemasına
-kaydedilir. Daha sonra model değiştirmek için yeni collection kullanılır.
+Each worker computes the query embedding locally. All workers must use the same
+embedding model digest, dimension, cosine metric, prefixes and chunking schema.
+The service fingerprints this configuration and rejects incompatible indexes.
+Worker requests always call `/v1/retrieve/local`, so a coordinator cannot recurse
+through its own aggregate endpoint.
 
-Varsayılan `keep_alive: 0` modelleri çağrı sonrası boşaltır: 8 GB bellek için temkinli
-başlangıçtır, yükleme süresi embedding/generation süresine dahildir. Bu yüzden ilk
-hız rakamları sürekli bellekte model tutan sistemlerle doğrudan karşılaştırılmaz.
+| Computer | Ethernet address | Role |
+|---|---|---|
+| MacBook | `192.168.50.10/24` | SSH management; not a measured search worker |
+| mini-1 | `192.168.50.11/24` | Coordinator, router, merger and answer model |
+| mini-2 | `192.168.50.12/24` | Independent retrieval API and Qdrant |
+| mini-3 | `192.168.50.13/24` | Independent retrieval API and Qdrant |
+| mini-4 | `192.168.50.14/24` | Independent retrieval API and Qdrant |
 
-### Qdrant: her mini'de ayrı Linux ARM64 container
+The switch has no internet uplink or DHCP server. Use manual addresses with mask
+`255.255.255.0`; leave Ethernet router and DNS blank. Wi-Fi can provide internet
+for installation and is disabled before measurements. You can use other private
+addresses by editing all corresponding configs; archived capture tools default
+to the addresses above.
 
-Qdrant image sürümü `v1.13.3` olarak sabit. Python adaptörü REST query API kullanır.
-Resmî kurulum/ARM64 desteği: https://qdrant.tech/documentation/installation/
+## Search policies
 
-Docker Desktop zaten varsa kullan. Yoksa hafif bir başlangıç seçeneği:
+| Policy | Behavior |
+|---|---|
+| `broadcast` | Query all configured workers concurrently and merge candidates. |
+| `semantic_sequential` | Rank cached worker descriptions by embedding similarity, then visit in order. No extra generative model call is used for routing. |
+| `random_sequential` | Visit a seeded random permutation without replacement. |
+| Single database baseline | Store all canonical vectors on one worker; configure the coordinator with only that retrieval endpoint. |
+
+Sequential policies stop after collecting `top_k` unique above-threshold chunks,
+or after exhausting the workers. **Reaching the similarity target is not proof
+of a correct answer.** The recorded random-order experiment retained categorical
+placement; it did not randomly shard text chunks. Genuine random placement is a
+separate, unmeasured extension.
+
+## Lab installation overview
+
+The full guide covers Ethernet, SSH, offline operation, persistence and recovery.
+After those prerequisites, on **each** mini:
 
 ```bash
-brew install colima docker docker-compose
+brew install python@3.12 uv colima docker docker-compose
 colima start --cpu 2 --memory 2 --disk 20
-```
-
-2 GB VM, 8 GB mini için başlangıç bütçesidir; indeks boyutu büyüyünce ölçerek ayarla.
-Docker Desktop ve Colima'yı aynı anda çalıştırma. Kullanılan Docker context'ini
-`docker context show` ile doğrula. Aşağıda Homebrew `docker-compose` komutu kullanılır;
-Docker Desktop'ta karşılığı `docker compose` olabilir.
-
-### Depo ve servis
-
-Uzak depo henüz atanmadı. Yayınlandıktan sonra seçilen URL'den clone edip proje
-kökünde çalış. Her mini aynı Git commit'ini kullanmalı.
-
-```bash
+git clone https://github.com/sstprk/belleq-local.git
+cd belleq-local
+git checkout v0.2.0
 uv sync --frozen --no-dev --python /opt/homebrew/bin/python3.12
-# Cihaza göre mini-1 / mini-2 / mini-3 / mini-4 seç:
-cp config/mini-1.json config/local.json
+# Replace mini-2 with this computer's ID.
+cp config/categorical/mini-2.json config/local.json
 docker-compose up -d
-curl --fail http://127.0.0.1:6333/collections
+ollama pull nomic-embed-text:latest
+# Only mini-1 also needs: ollama pull qwen3:1.7b
 .venv/bin/python -m belleq_lab
 ```
 
-Son komut ilk doğrulama için ön planda çalışır. Startup embedding modelini,
-vektör boyutunu ve Qdrant collection şemasını kontrol eder. Henüz model indirilmemişse
-veya Qdrant yoksa başlamaz; yanlış indeksle sessizce arama yapmaz.
-Ana API yalnızca config'teki Ethernet IP'sine bağlanır. Qdrant sadece localhost'a açıktır.
-Ayrılmış lab ağı için API anahtarı varsayılan boş. Gerekirse bütün servisler ve
-istemcilerde aynı `BELLEQ_API_KEY` ortam değişkenini ayarla; HTTP'de `X-API-Key` gönder.
-TLS bu pakette yoktur, internet üzerinde açık yayın için tasarlanmamıştır.
-
-## SSH kapanınca çalışmaya devam etme
-
-Ön plandaki servisi Ctrl-C ile kapatıp:
+Install and start the native [Ollama macOS application](https://docs.ollama.com/macos)
+before the `ollama` commands. Qdrant runs in a pinned ARM64-compatible container;
+Ollama runs natively on the Mac. **Do not run the simulator environment in place
+of the lab environment.** Both have separate dependencies.
 
 ```bash
-.venv/bin/python scripts/service.py install
-.venv/bin/python scripts/service.py status
-curl --fail http://192.168.50.11:8000/health/ready
-```
-
-Her mini'de kendi IP'sini kullan. User LaunchAgent SSH oturumuna bağlı değildir;
-yerel kullanıcı oturumu açıkken çalışır. Yeniden başlatma sonrası kullanıcı girişini,
-Colima/Docker ve Ollama'nın açıldığını doğrula. Kullanıcı hiç giriş yapmadan boot'ta
-çalışma bu paketin garantisi değildir. Bağımlılıklar geç açılırsa başarısız uygulama
-30 saniyelik yeniden başlatma aralığıyla tekrar dener.
-
-```bash
-.venv/bin/python scripts/service.py stop
-.venv/bin/python scripts/service.py start
-# Config veya kod değişikliği: stop, ardından start.
-tail -f logs/service.err.log
-# Servis kaydını kaldırır; Qdrant verilerine dokunmaz:
-.venv/bin/python scripts/service.py uninstall
-```
-
-Kalıcı veri Docker named volume'lerinde `qdrant_data` ve `qdrant_snapshots` bulunur.
-`docker-compose stop` veri silmez. **`down -v` veriyi siler; normal durdurmada kullanma.**
-Colima VM'sini silmek de içindeki volume'leri kaybettirir. Uzun deney öncesi snapshot
-ve yedek planla. Loglar `logs/` altında büyür; deneyler arasında arşivle.
-
-## MacBook'tan API kullanımı
-
-```bash
-# mini-2'ye bir belge:
-curl --fail http://192.168.50.12:8000/v1/documents/upload \
-  -F 'file=@/ABSOLUTE/PATH/example.pdf'
-
-# JSON ile küçük belge:
-curl --fail http://192.168.50.12:8000/v1/documents/text \
-  -H 'Content-Type: application/json' \
-  -d '{"text":"Belleq ilgili belge parçalarını getirir.","title":"Örnek","source":"example.txt"}'
-
-# Yalnızca mini-2'de arama:
-curl --fail http://192.168.50.12:8000/query \
-  -H 'Content-Type: application/json' -d '{"query":"Belleq ne yapar?","top_k":5}'
-
-# Bütün yapılandırılmış worker'larda arama:
+curl --fail http://192.168.50.12:8000/health/ready
 curl --fail http://192.168.50.11:8000/v1/retrieve/aggregate \
-  -H 'Content-Type: application/json' -d '{"query":"Belleq ne yapar?","top_k":5}'
-
-# Sonucu prompt'a ekle ve Qwen'den cevap al:
-curl --fail http://192.168.50.11:8000/v1/answer \
-  -H 'Content-Type: application/json' -d '{"query":"Belleq ne yapar?","top_k":5}'
+  -H 'Content-Type: application/json' \
+  -d '{"query":"What does Holmes deduce?","mode":"broadcast","top_k":3,"per_node_k":5,"min_score":0.70}'
 ```
 
-Node sonuçları `id`, `doc_id`, `text`, `score`, kaynak metadata'sı içerir. Aggregate
-`locations` ile aynı parçanın diğer kaynaklarını korur. Metni birebir aynı olan
-parçalar tekilleştirilir, yüksek skor korunur. `per_node_k` varsayılan `top_k`;
-tekrarlar yüzünden sonuç sayısı az kalırsa açıkça daha yüksek `per_node_k` ver.
-Embedding modeli/digest/boyut/mesafe/prefix/chunking uyuşmazlığı hata sayılır.
+## Recorded results
 
-Worker başarısızsa varsayılan HTTP 503: `detail` içinde düğüm durumları ve alınabilen
-sonuçlar bulunur. Açıkça `allow_partial:true` ile HTTP 200 kısmi sonuç alınabilir;
-`partial:true` ve `failed_nodes` alanları kaybolmaz. Bütün düğümler başarısızsa
-her durumda 503. Cevap üretimi hatası 502 döner ve retrieval sonucu korunur.
+| Policy | Complete / attempts | Mean retrieval ms | Captured kB/query | Reference Hit@3 |
+|---|---:|---:|---:|---:|
+| Semantic sequential | 498 / 500 | 952.4 | 12.35 | 40.8% |
+| Parallel broadcast | 500 / 500 | 338.6 | 18.56 | 42.8% |
+| Random sequential | 500 / 500 | 727.9 | 14.47 | 41.4% |
+| Single database | 500 / 500 | 310.4 | 6.15 | 42.6% |
 
-Prompt yalnızca seçilmiş metinleri içerir; numaralı kaynaklar `context_chunks` ile
-birebir eşleşir. Bütçe karakter temellidir, kesin tokenizer hesabı değildir.
-Çok uzun/özel token yoğun içerik için `context_chars` azaltılmalı. Qwen çıktısındaki
-atıfların doğruluğunu bir değerlendirme kümesiyle ayrıca ölç.
+Latency uses completed requests; traffic and reference-hit denominators retain
+all attempts. Captured traffic is coordinator Ethernet frame accounting for
+worker HTTP traffic inside query windows, **not total physical Ethernet load**.
+Reference labels are synthetic, nonexhaustive and not human reviewed; Hit@3 is
+not generated-answer accuracy. Policy and session effects are partly confounded.
 
-## Aynı veriyle 1, 2, 3 worker deneyi
+![Observed retrieval latency and captured traffic](simulator/figures/01_observed_tradeoff.png)
 
-MacBook'ta da Python ortamını `uv sync --frozen --no-dev` ile kur. Her koşul için
-**yeni collection** kullan; eski verinin koşullar arasında birikmesine izin verme.
-Örnek bir-worker koşulu:
+The simulator's held-out mean errors were within 4.0% for retrieval and 5.6% for
+captured traffic in the tested configurations. Client-duration means were
+underestimated by roughly 8.4–10.1%. Ridge did not outperform the per-method mean
+for retrieval or traffic. New worker counts are assumption-based, not physically
+validated scaling results. See the [full interpretation](docs/RESULTS.md).
+
+## Research inputs and reproducibility
+
+The normal clone includes source, tests, the frozen JSON model, summary tables,
+derived permutations, figures and the paper report. The larger measurement
+inputs are a separate **versioned release asset**, not Git blobs:
 
 ```bash
-.venv/bin/python scripts/experiment.py --workers 1 --run trial01 --output data/n1
-.venv/bin/python scripts/partition.py /ABSOLUTE/PATH/corpus \
-  --nodes mini-2 --output data/manifest-n1.json
+# From the repository root, using only the Python standard library:
+python3.12 scripts/fetch_research_data.py
 ```
 
-`data/n1/mini-N.json` dosyalarını ilgili mini'ye `config/local.json` olarak kopyala,
-servisleri yeniden başlat. Örnek: `scp data/n1/mini-2.json USER@192.168.50.12:PATH/TO/REPO/config/local.json`.
-Sonra:
+The fetcher checks the archive SHA-256, checks each of 89 research inputs and
+rejects unsafe extraction paths or replacement of different existing data.
+For an offline import, download the archive once and use `--archive FILE`.
+[Data availability](docs/DATA.md) explains the 2,000 main attempts, 1,000 auxiliary
+0.80 attempts, 500 questions, packet captures and provenance. Only personal
+`source_csv` paths were shortened; numerical observations were retained.
 
 ```bash
-.venv/bin/python scripts/ingest_manifest.py /ABSOLUTE/PATH/corpus data/manifest-n1.json \
-  --config-dir data/n1 > data/ingestion-n1.jsonl
-.venv/bin/python scripts/benchmark.py \
-  --url http://192.168.50.11:8000/v1/retrieve/aggregate \
-  --queries data/questions.txt --repeat 3 --concurrency 1 --output data/results-n1.jsonl
+cd simulator
+PYTHONPATH=src .venv/bin/python -m belleq_sim train
+PYTHONPATH=src .venv/bin/python scripts/figures.py
+PYTHONPATH=src .venv/bin/python scripts/verify.py
 ```
 
-İki worker için `--workers 2`, `--nodes mini-2 mini-3`; üç için `--workers 3`,
-`--nodes mini-2 mini-3 mini-4`. Her koşula ayrı çıktı klasörü/manifest ver.
-Corpus SHA aynı kalmalı. Dağıtım belge bazında, SHA sıralı round-robin;
-**belge sayısını dengeler, chunk sayısını garanti etmez.** Yükleme çıktılarındaki
-chunk sayılarıyla dengesizliği raporla. Birebir aynı dosyalar bir kez alınır.
-Düzenlenmiş belge yeni içerik kimliği alır; eski sürümü otomatik silmez. Bu yüzden
-her deney koşulunda yeni collection kullanmak şarttır.
+Use a separate clone when rebuilding: training writes derived tables and model
+files. [Reproducibility](docs/REPRODUCIBILITY.md) distinguishes regenerating the
+analysis from rerunning physical hardware and describes optional PCAP auditing.
 
-Qdrant indekslerinin hazır olmasını bekle; yükleme sırasında benchmark çalıştırma.
-Aynı soruları, top-k'yi, modeli, prefix'leri ve concurrency'yi koru. İlk turu
-ısınma olarak ayrı raporla. p50/p95 süreleri yanında hata oranı ve arama kalitesini
-(recall@k / kaynak doğruluğu) raporla. ANN ve düğüm sınırları sonucu etkileyebilir;
-eşit hız tek başına yeterli değildir. Ground-truth kalite değerlendirmesi henüz eklenmedi.
+## Repository layout
 
-Belleq yaşam döngüsü, kayıt yakalama ve uygulama retrieval cache'i yok. Qdrant/OS
-cache'leri vardır; bu sonuçları 'tamamen cold cache' diye etiketleme.
-
-## Ölçümler ve offline çalışma
-
-- Worker: readiness, embedding, vector search ve toplam süre.
-- Aggregator: her worker'ın round-trip süresi, fan-out, merge ve toplam süre.
-- Answer: generation ve end-to-end süre.
-- Trafik: worker HTTP istek/yanıt gövdelerinin UTF-8 byte miktarı. Başarısız çağrıda
-  request bytes hazırlanan gövde boyutudur, teslim edildiğinin kanıtı değildir.
-  HTTP header/TCP/Ethernet overhead ve worker↔Ollama/Qdrant trafiği dahil değildir.
-- Query ID bütün worker çağrılarına yayılır; JSON ölçümleri loglara yazılır.
-
-Gerçek ağ trafiği için ilgili Ethernet arayüzünde ayrıca packet capture / arayüz
-sayaçları kullan. SSH ve indirme trafiğini ayrı tut. MacBook adaptörünün 100 Mbps
-olduğu önceki kurulumda görüldü; mini-mini link hızlarını ayrıca kaydet.
-
-Offline kullanımdan önce her mini'de `uv sync`, Docker image pull, embedding pull;
-mini-1'de generation pull tamamlanmalı. `uv.lock` ve hash'li `requirements.lock.txt`
-tüm Python bağımlılıklarını sabitler. Hazır `.venv`, Docker volume ve Ollama
-modellerini koruyarak çalışma sırasında download yapılmaz. Cold offline yeniden
-kurulum için ayrıca wheelhouse, image export ve model dosyası yedeği gerekir;
-bu paket büyük model dosyalarını içermez.
-
-## Kaynak ve testler
-
-`PROVENANCE.md` yeniden kullanılan kaynakları; `VALIDATION.md` gerçek doğrulama
-kapsamını içerir. Test çalıştırmak için:
-
-```bash
-uv sync --frozen
-uv run --frozen pytest -q
+```text
+belleq_lab/             Real FastAPI lab service and retrieval backends
+config/                Per-mini example configs and categorical experiment profile
+scripts/               Lab lifecycle, ingestion, evaluation and publication tools
+tests/                 Lab service and orchestration tests
+simulator/             Model, local web UI, CLI, training, figures and research report
+web-demo/              Optional self-contained stateless Vercel adapter
+docs/                  Setup, API, experiments, data, results and reproducibility
+provenance/            Imported-file hashes and publication validation
+data-release.json      Versioned research archive URL, size and SHA-256
+CITATION.cff           Software citation metadata
 ```
 
-Bu ilk teslim çalışan mini kümesi üzerinde doğrulanmış bir performans sonucu değildir.
+## Citation license and journal use
 
-## Deney ölçümleri
+Use the **v0.2.0 release and its exact commit**, rather than a moving `main`
+branch, in an article's code-availability statement. GitHub exposes the metadata
+in [CITATION.cff](CITATION.cff). The report and all five PNG/PDF figures are in
+[the research report directory](simulator/paper_report_20261022/README.txt).
 
-Kategorik yerleşimde sorgu ve mini bazlı kalite/süre CSV'leri, paket kaydı ve
-Wireshark/TShark trafik analizi için [EVALUATION.md](EVALUATION.md).
-Dokuz soruluk set yalnızca etiketleri gözden geçirilecek bir pilot settir.
+No journal acceptance, paper DOI or archival DOI is claimed. For a durable DOI,
+archive the release with a suitable repository such as Zenodo, verify the author
+list, then add the assigned DOI to the citation metadata. GitHub release URLs
+identify a version but are not DOI registrations.
+
+The software is [MIT licensed](LICENSE), with Belleq origin documented in
+[PROVENANCE.md](PROVENANCE.md). Models, external libraries, original novels and
+third-party materials retain their own terms; see [data and licenses](docs/DATA.md).
+Read [security](SECURITY.md) before exposing a lab endpoint outside its isolated LAN.

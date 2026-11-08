@@ -1,4 +1,4 @@
-"""Reproducible retrieval-only experiment; no extra local probes during the run."""
+"""Reproducible retrieval/answer experiment; no extra local probes during the run."""
 import argparse
 import asyncio
 import csv
@@ -64,7 +64,7 @@ async def run(a):
     manifest = {k: str(v) if isinstance(v, Path) else v for k, v in vars(a).items()}
     manifest.update(query_set_sha256=hashlib.sha256(raw).hexdigest(),
                     quality_status='draft' if any(not q.get('reviewed') for q in cases) else 'reviewed',
-                    note='retrieval only; node body bytes are not Ethernet bytes; no generation')
+                    note='Endpoint selects retrieval or answer; body bytes are not Ethernet bytes')
     (a.output/'manifest.json').write_text(json.dumps(manifest, indent=2))
     rows, nodes = [], []
     rng = random.Random(a.seed)
@@ -76,10 +76,11 @@ async def run(a):
                 phase = 'warmup' if iteration < a.warmup else 'measured'
                 order = cases.copy()
                 rng.shuffle(order)
-                for case in order:
+                for case_index, case in enumerate(order):
                     qid = str(uuid.uuid4())
                     payload = dict(query=case['query'], query_id=qid, top_k=a.top_k,
-                                   per_node_k=a.per_node_k, mode=a.mode, min_score=a.min_score)
+                                   per_node_k=a.per_node_k, mode=a.mode, min_score=a.min_score,
+                                   random_seed=a.seed+iteration*len(cases)+case_index)
                     body = json.dumps(payload, ensure_ascii=False).encode()
                     start_epoch, start = time.time(), time.perf_counter()
                     record = dict(query_id=qid, case_id=case['case_id'], phase=phase,
@@ -98,11 +99,21 @@ async def run(a):
                     success = record.get('http_status') == 200 and not data.get('partial', True)
                     row = {k: record[k] for k in ('query_id','case_id','phase','iteration','start_epoch','end_epoch','client_ms')}
                     row.update(complete=success, http_status=record.get('http_status'), error=record.get('error'))
+                    row.update(question=case['query'],answer=data.get('answer'),
+                               expected_answer=case.get('expected_answer'),mode=a.mode,scenario=a.scenario,
+                               min_score=a.min_score,top_k=a.top_k,per_node_k=a.per_node_k,
+                               random_seed=payload['random_seed'],
+                               client_request_body_bytes=len(body),
+                               client_response_body_bytes=record.get('response_body_bytes'))
                     if success:
                         row.update(quality(data['chunks'], case['relevant_hashes'], a.top_k))
                     details = data.get('detail', data)
                     if not isinstance(details, dict): details = {}
                     row.update(details.get('timings', {}))
+                    for key in ['generation_ms','end_to_end_ms']:
+                        row[key]=details.get(key)
+                    for key in ['chunks','context_chunks','nodes','routing','failed_nodes','traffic']:
+                        row[key+'_json']=json.dumps(details.get(key),ensure_ascii=False)
                     routing = details.get('routing', {})
                     row.update(target_reached=routing.get('target_reached'),
                                stop_reason=routing.get('stop_reason'),
@@ -132,8 +143,8 @@ def main():
     p.add_argument('--url', default='http://192.168.50.11:8000/v1/retrieve/aggregate')
     p.add_argument('--queries', type=Path, required=True)
     p.add_argument('--output', type=Path, required=True)
-    p.add_argument('--scenario', choices=['categorical','random_chunks','single_db'], required=True)
-    p.add_argument('--mode', choices=['broadcast','semantic_sequential'], required=True)
+    p.add_argument('--scenario', choices=['categorical','random_node_order','random_chunks','single_db'], required=True)
+    p.add_argument('--mode', choices=['broadcast','semantic_sequential','random_sequential'], required=True)
     p.add_argument('--nodes', nargs='+', default=['mini-2','mini-3','mini-4'])
     p.add_argument('--top-k', type=int, default=3)
     p.add_argument('--per-node-k', type=int, default=5)

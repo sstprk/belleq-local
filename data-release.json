@@ -1,0 +1,9 @@
+{
+  "version": "v0.2.0",
+  "filename": "belleq-research-data-v0.2.0.tar.gz",
+  "bytes": 23336576,
+  "sha256": "73590f1a5a48a706d1079358ec3f847ebe9be4ca97d50259fb6f9633703f007b",
+  "raw_input_files": 89,
+  "url": "https://github.com/sstprk/belleq-local/releases/download/v0.2.0/belleq-research-data-v0.2.0.tar.gz",
+  "transformation": "Only local source_csv paths are replaced by basenames. Numerical observations are retained."
+}

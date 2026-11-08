@@ -1,0 +1,17 @@
+{
+  "queries_checked": 2000,
+  "all_match": true,
+  "mismatches": 0,
+  "captures": {
+    "old": {
+      "path": "data/raw/oct12/categorical.complete-records.pcap",
+      "sha256": "ff0de6136bb8d987d884c5da179dfb9bdb78723397205aaf6cd6fd3a05679a94"
+    },
+    "restart": {
+      "path": "data/raw/oct14/capture_restart.pcap",
+      "sha256": "7464ee40788b45d56296ebd7a1482ef35ca03e5665e62eb7e2a98e788efc7f69"
+    }
+  },
+  "tshark_version": "TShark (Wireshark) 4.4.6 (Git commit 920939a40074).",
+  "note": "Captured coordinator frame bytes inside request windows; not complete wire utilization."
+}

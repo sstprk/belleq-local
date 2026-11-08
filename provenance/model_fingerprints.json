@@ -1,0 +1,90 @@
+{
+  "source": "archived 2026-10-14 preflight",
+  "nodes": {
+    "mini-1": {
+      "embedding_signature": {
+        "model": "nomic-embed-text:latest",
+        "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+        "dimension": 768,
+        "distance": "Cosine",
+        "query_prefix": "search_query: ",
+        "document_prefix": "search_document: ",
+        "chunking": "belleq-512chars-64overlap-v1"
+      },
+      "retrieval_fingerprint": "f14e9f689df9e6a0a5d0a5b9cb36c79bfed50e14a409c3026b0a6c855dc697ce",
+      "models": [
+        {
+          "name": "nomic-embed-text:latest",
+          "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+          "size": 274302450
+        },
+        {
+          "name": "qwen3:1.7b",
+          "digest": "8f68893c685c3ddff2aa3fffce2aa60a30bb2da65ca488b61fff134a4d1730e7",
+          "size": 1359293444
+        }
+      ],
+      "os_version": "ProductName:\t\tmacOS\nProductVersion:\t\t26.2\nBuildVersion:\t\t25C56"
+    },
+    "mini-2": {
+      "embedding_signature": {
+        "model": "nomic-embed-text:latest",
+        "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+        "dimension": 768,
+        "distance": "Cosine",
+        "query_prefix": "search_query: ",
+        "document_prefix": "search_document: ",
+        "chunking": "belleq-512chars-64overlap-v1"
+      },
+      "retrieval_fingerprint": "f14e9f689df9e6a0a5d0a5b9cb36c79bfed50e14a409c3026b0a6c855dc697ce",
+      "models": [
+        {
+          "name": "nomic-embed-text:latest",
+          "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+          "size": 274302450
+        }
+      ],
+      "os_version": "ProductName:\t\tmacOS\nProductVersion:\t\t26.2\nBuildVersion:\t\t25C56"
+    },
+    "mini-3": {
+      "embedding_signature": {
+        "model": "nomic-embed-text:latest",
+        "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+        "dimension": 768,
+        "distance": "Cosine",
+        "query_prefix": "search_query: ",
+        "document_prefix": "search_document: ",
+        "chunking": "belleq-512chars-64overlap-v1"
+      },
+      "retrieval_fingerprint": "f14e9f689df9e6a0a5d0a5b9cb36c79bfed50e14a409c3026b0a6c855dc697ce",
+      "models": [
+        {
+          "name": "nomic-embed-text:latest",
+          "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+          "size": 274302450
+        }
+      ],
+      "os_version": "ProductName:\t\tmacOS\nProductVersion:\t\t26.2\nBuildVersion:\t\t25C56"
+    },
+    "mini-4": {
+      "embedding_signature": {
+        "model": "nomic-embed-text:latest",
+        "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+        "dimension": 768,
+        "distance": "Cosine",
+        "query_prefix": "search_query: ",
+        "document_prefix": "search_document: ",
+        "chunking": "belleq-512chars-64overlap-v1"
+      },
+      "retrieval_fingerprint": "f14e9f689df9e6a0a5d0a5b9cb36c79bfed50e14a409c3026b0a6c855dc697ce",
+      "models": [
+        {
+          "name": "nomic-embed-text:latest",
+          "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+          "size": 274302450
+        }
+      ],
+      "os_version": "ProductName:\t\tmacOS\nProductVersion:\t\t26.2\nBuildVersion:\t\t25C56"
+    }
+  }
+}
